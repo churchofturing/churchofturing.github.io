@@ -236,3 +236,4 @@ If you're interested in reading more, I would recommend:
 - [c2 Wiki page on lexical closures](https://wiki.c2.com/?LexicalClosure)
 - [MDN page on closures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures)
 - [[PDF] A Tutorial Introduction to Lambda Calculus](https://personal.utdallas.edu/~gupta/courses/apl/lambda.pdf)
+- [Let Over Lambda by Doug Hoyte - Chapter 2](https://letoverlambda.com/index.cl)
