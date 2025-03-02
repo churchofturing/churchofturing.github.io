@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="container">
+    <h1 class="name">
+      <a href="/">Church Of Turing</a>
+    </h1>
+    <hr />
+    <p>Closures are an interesting technique for encapsulating functionality and state. I&#39;ll be exploring what
+      closures are, where they are useful and how they came about. The examples will be in JavaScript which is lexically
+      scoped, but I&#39;m keen to emphasise that lexical closures are a subset of closures in general.</p>
+    <h2 id="what-are-closures">What are closures?</h2>
+    <p>A closure can be thought of as a way of bundling a function with its <em>environment</em>. The key thing to
+      stress here is that the combination of function and environment is what comprises the closure, and not just the
+      function itself. </p>
+    <p>To understand this a bit more intuitively, it&#39;s worthwhile to talk about open and closed lambda expressions.
+      Take the following lambda for example:</p>
+    <pre><code class="language-js">(n =&gt; n**2)
+</code></pre>
+    <p>We could call this a <strong>closed expression</strong>, in that it&#39;s absent of any free variables. All the
+      variables within the expression are bound, and to evaluate the function it&#39;s as straightforward as
+      substituting <code>n</code>. </p>
+    <pre><code class="language-js">(n =&gt; n**2)(2) // (2 =&gt; 2**2) -&gt; 4
+(n =&gt; n**2)(8) // (8 =&gt; 8**2) -&gt; 64
+</code></pre>
+    <p>On the other hand, an <strong>open expression</strong> is one that includes one or more free variables - that is,
+      a variable that is neither a parameter or local variable. Take the example:</p>
+    <pre><code class="language-js">(n =&gt; n**2 + y)(2) // (2 =&gt; 2**2 + ???) -&gt; ???
+</code></pre>
+    <p>This is an open expression because we don&#39;t have enough information at this stage to be able to evaluate it -
+      <em>where does y come from?</em> To be able to evaluate this expression we have to supply <em>y</em> from some
+      surrounding environment.</p>
+    <p>We&#39;ve already reached the heart of what a closure is: it&#39;s an open expression that is &quot;closed&quot;
+      by supplying the environment. According to Joel Moses, Peter Landin introduced the term <a
+        href="https://dspace.mit.edu/bitstream/handle/1721.1/5854/AIM-199.pdf?sequence=2&isAllowed=y">&quot;closure&quot;
+        to describe this situation</a>.</p>
+    <h2 id="how-is-the-environment-supplied">How is the environment supplied?</h2>
+    <p>This depends on the language used and how it handles scoping. JavaScript for example is <strong>lexically
+        scoped</strong>, meaning that the scope of the variable is defined by its textual location within the source
+      code.</p>
+    <pre><code class="language-js">const makeCounter = () =&gt; {
+  let state = 0;
+  return {
+    show: () =&gt; state,
+    increment: () =&gt; state++,
+    decrement: () =&gt; state--,
+  };
+};  
+
+let counter = makeCounter();
+console.log(counter.show()) // 0
+console.log(counter.increment()) // 1
+console.log(counter.decrement()) // 0
+</code></pre>
+    <p>The open expression <code>increment</code> finds the free variable &quot;state&quot; in the lexical environment,
+      and this is what creates the closure.</p>
+    <p>Lexical closures are by far the most popular form of closures, to the extent that in casual conversation
+      they&#39;re effectively synonymous. They are not however the <em>only</em> form of closures. Languages with other
+      scoping mechanisms are capable of producing different types of closures. For example, Lisp 1.5 was dynamically
+      scoped and could therefore leverage <a href="http://wiki.c2.com/?DynamicClosure">dynamic closures</a>.</p>
+    <h2 id="where-are-they-useful">Where are they useful?</h2>
+    <p>Closures are very versatile and can be used in many different situations, however I typically use them for:</p>
+    <ul>
+      <li>Event handlers</li>
+      <li>State machines</li>
+      <li>Iterators</li>
+    </ul>
+    <h3 id="event-handlers">Event handlers</h3>
+    <p>Closures are a nice way of encapsulating state for event handlers. Here&#39;s an example using client-side
+      JavaScript to maintain a counter.</p>
+    <pre><code class="language-js">// &lt;button id=&quot;increment&quot;&gt;+&lt;/button&gt;
+// &lt;p id=&quot;value&quot;&gt;&lt;/p&gt;
+// &lt;button id=&quot;decrement&quot;&gt;-&lt;/button&gt;
+
+function createCounter() {
+  let counter = 0;
+  return {
+    currentState: () =&gt; counter,
+    increment: () =&gt; ++counter,
+    decrement: () =&gt; --counter,
+  }
+}
+
+function onClick(elem, update, render) {
+  elem.addEventListener(&#39;click&#39;, () =&gt; {
+    update();
+    render();
+  });
+}
+
+const counter = createCounter();
+
+const incrementBtn = document.getElementById(&quot;increment&quot;);
+const decrementBtn = document.getElementById(&quot;decrement&quot;);
+const value = document.getElementById(&quot;value&quot;);
+
+// Display the default state
+value.innerHTML = counter.currentState();
+onClick(
+  incrementBtn,
+  counter.increment, 
+  () =&gt; value.innerHTML = counter.currentState()
+);
+
+onClick(
+  decrementBtn,
+  counter.decrement, 
+  () =&gt; value.innerHTML = counter.currentState()
+);
+</code></pre>
+    <h3 id="state-machines">State machines</h3>
+    <p>Here&#39;s an example of a state machine implemented using a closure. The state machine represents a simple
+      turnstile, where it&#39;s locked until someone inserts a coin in which case they can push through it.</p>
+    <pre><code>               Insert
++----------+    coin     +------------+
+|          +------------&gt;|            |
+|          |             |            |
+|  Locked  |             |  Unlocked  |
+|          |             |            |
+|          |&lt;------------+            |
++----------+    Push     +------------+
+</code></pre>
+    <p>This state machine can be represented using a closure like so:</p>
+    <pre><code class="language-js">function createTurnstile() {
+  let currentState = &#39;locked&#39;;
+  const transitions = {
+    &#39;locked&#39;: {
+      &#39;insert-coin&#39;: &#39;unlocked&#39;,
+    },
+    &#39;unlocked&#39;: {
+      &#39;push&#39;: &#39;locked&#39;
+    }
+  };
+
+  return {
+    transition: (action) =&gt; {
+      if (transitions[currentState][action]) {
+        currentState = transitions[currentState][action];
+        return currentState;
+      } else {
+        console.error(`Invalid ${action} for state ${currentState}`);
+      }
+    },
+    currentState: () =&gt; currentState,
+  };
+}
+
+const turnstile = createTurnstile();
+console.log(turnstile.currentState()); // &#39;locked&#39;
+console.log(turnstile.transition(&#39;insert-coin&#39;)); // &#39;unlocked&#39;
+console.log(turnstile.transition(&#39;push&#39;)); // &#39;locked&#39;
+</code></pre>
+    <p>I&#39;ve hardcoded the default state and the transitions within the function, but these can easily be passed as
+      arguments to make a more generalised state machine creator. This is an exercise left to the reader; try it in your
+      language of choice.</p>
+    <h3 id="iterators">Iterators</h3>
+    <p>Closures can be used to make iterators, which are a useful abstraction for traversing lists.</p>
+    <p>Lets use an example of a (simplified) monopoly board.</p>
+    <pre><code class="language-js">function createMonopoly(board) {
+  let index = 0;
+  return {
+    currentState: () =&gt; board[index],
+    step: (n = 1) =&gt; board[(index += n) % board.length]
+  }
+}
+
+const monopoly = createMonopoly([
+  &quot;collect $200&quot;,
+  &quot;baltic avenue&quot;,
+  &quot;community chest&quot;,
+  &quot;boardwalk&quot;
+]);
+
+console.log(monopoly.currentState()); // &#39;collect $200&#39;
+console.log(monopoly.step()); // &#39;baltic avenue
+console.log(monopoly.step()); // &#39;community chest&#39;
+console.log(monopoly.step()); // &#39;boardwalk
+console.log(monopoly.step(2)); // &#39;baltic avenue&#39;
+console.log(monopoly.step(3)) // &#39;collect $200&#39;
+</code></pre>
+    <p>This creates an iterator that cycles through the list, simulating the steps a player would take through a
+      monopoly board.</p>
+    <h3 id="but">But...</h3>
+    <p>Yes, your language of choice already <em>has</em> classes and iterators and so on. You might be asking
+      &quot;what&#39;s the point?&quot;. I don&#39;t have a compelling argument other than I think these abstractions
+      are neat, elegant and fairly language independent (given that most mainstream languages support lexical closures
+      at this point). Two of those reasons are entirely subjective and the other one isn&#39;t strong on its own. Use
+      what you think is appropriate, but it never hurts knowing more than one way to do something. </p>
+    <h2 id="further-reading">Further reading</h2>
+    <p>If you&#39;re interested in reading more, I would recommend:</p>
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Closure_(computer_programming)">The Wikipedia page on closures</a></li>
+      <li><a href="https://wiki.c2.com/?LexicalClosure">c2 Wiki page on lexical closures</a></li>
+      <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures">MDN page on closures</a></li>
+      <li><a href="https://personal.utdallas.edu/~gupta/courses/apl/lambda.pdf">[PDF] A Tutorial Introduction to Lambda
+          Calculus</a></li>
+      <li><a href="https://letoverlambda.com/index.cl">Let Over Lambda by Doug Hoyte - Chapter 2</a></li>
+    </ul>
+
+  </div>
+</body>
+
+</html>
