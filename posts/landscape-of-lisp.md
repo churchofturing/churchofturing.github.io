@@ -320,7 +320,7 @@ I'd wager a guess that Clojure is the most popular of the Lisps out there, makin
 
 # Racket
 
-[Racket](https://en.wikipedia.org/wiki/Racket_(programming_language)) is a dialect of Scheme that is used mainly as a tool for teaching, and as a playground for programming language research and development. It's often said that Racket has one of the most powerful macro systems amongst the Lisps - to these ends it's a great language. 
+[Racket](https://en.wikipedia.org/wiki/Racket_(programming_language)) is an interesting one. It's a dialect of Scheme that is used mainly as a tool for teaching and as a playground for programming language research and development - to these ends it's by all means a great language. It's often said that Racket has one of the most powerful macro systems amongst the Lisps, and as proof more than a few postgrads have earned their PhDs using it. 
 
 ## Books
 
