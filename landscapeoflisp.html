@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="container">
+    <h1 class="name">
+      <a href="/">Church Of Turing</a>
+    </h1>
+    <hr />
+    <p>Lisp is a family of programming languages with a long, rich and oftentimes confusing tradition.
+      Unware of it at the time, in 1960 John McCarthy published <a
+        href="https://www-formal.stanford.edu/jmc/recursive.pdf">a paper</a>
+      that over the next 64 years would spawn a thousand dialects and a number of <em>very</em> good ideas.</p>
+    <p>The fragmentation of the Lisp family from an outside perspective can seem really confusing to newcomers, like a
+      software Tower of Babel. In fact the variety of Lisp is in my opinion one of it&#39;s best qualities.
+      It almost guarantees that as long as you can overcome the (relatively) small barriers
+      of the paren-heavy syntax and prefix notation that there will be a dialect and community that
+      closely mirrors your philosophy on software development. </p>
+    <p>The purpose of this post isn&#39;t to convince the reader of how great Lisp is;
+      rather, I assume the reader is already somewhat interested and is now trying to
+      figure out which of these dialects is the best fit for them. It also isn&#39;t about &quot;which Lisp is the
+      best&quot; type questions, but instead it&#39;s just my subjective
+      view of the more prominent Lisp dialects. </p>
+    <p>Tl;dr:</p>
+    <ul>
+      <li>If you want a minimalist, elegant Lisp with a strong academic foundation: choose Scheme.</li>
+      <li>If you want a powerful, batteries-included Lisp with a rich standard library and decades of history: choose
+        Common Lisp.</li>
+      <li>If you want a modern Lisp with functional programming, concurrency, and JVM interop: choose Clojure.</li>
+      <li>If you want a beginner-friendly Lisp with great tooling and a focus on education and extensibility: choose
+        Racket.</li>
+    </ul>
+    <p>If the reader isn&#39;t already convinced but is still curious, I would recommend reading the following articles:
+    </p>
+    <ul>
+      <li><a href="https://paulgraham.com/avg.html">Beating the Averages - Paul Graham</a></li>
+      <li><a href="https://dreamsongs.com/WIB.html">Lisp: Good News, Bad News, How to Win Big - Richard P. Gabriel</a>
+      </li>
+      <li><a href="https://dreamsongs.com/ArtOfLisp.html">The Art of Lisp &amp; Writing - Richard P. Gabriel</a></li>
+      <li><a href="https://paulgraham.com/progbot.html">Programming Bottom-Up - Paul Graham</a> </li>
+      <li><a href="http://www.catb.org/%7Eesr/faqs/hacker-howto.html">How To Become A Hacker - Eric Steven Raymond</a>
+      </li>
+      <li><a href="https://twobithistory.org/2018/10/14/lisp.html">How Lisp Became God&#39;s Own Programming Language -
+          Sinclair Target</a></li>
+    </ul>
+    <h1 id="culture">Culture</h1>
+    <p>I mentioned earlier that Lisp&#39;s diversity is one of it&#39;s best qualities, and I stand by that. A side
+      effect of this
+      however is that inter-dialect tribalism is unfortunately common. It&#39;s a weird reality that the smallest of
+      differences
+      seem to incite the most vitriol, whether it&#39;s with programming language dialects or <a
+        href="https://www.youtube.com/watch?v=l3fAcxcxoZ8">Northern Conservative Baptism.</a>.</p>
+    <p>I&#39;ve noticed this kind of anger express itself more when people start to blur the lines between their
+      interests
+      and their identity. At this point it&#39;s difficult to <em>not</em> take technical disagreement as a personal
+      insult. If you do
+      start considering yourself a Lisper, remember that we&#39;re all more similar than we are different
+      and there&#39;s plenty of room for a variety of opinion. </p>
+    <p>Not to leave on a sour note, Lisp also attracts some of the most thoughtful and intelligent people whose
+      willingness
+      to openly share their knowledge has changed me for the better. </p>
+    <h1 id="history">History</h1>
+    <p>A quick aside. It can be hard to understand the design decisions made by Lisps without knowing at least a bit
+      about their
+      evolutionary history. Why do humans get goosebumps? Why is Emacs Lisp dynamically scoped? The best way of getting
+      a sense of how Lisp has evolved is to reference the numerous papers written at various times.</p>
+    <p>This isn&#39;t at all necessary to picking up a Lisp by the way, I just think it&#39;s neat.</p>
+    <ul>
+      <li><a href="https://www.softwarepreservation.org/projects/LISP/book/LISP%201.5%20Programmers%20Manual.pdf">Lisp
+          1.5 Programmer&#39;s Manual John McCarthy et al. (1962)</a></li>
+      <li><a href="http://jmc.stanford.edu/articles/lisp/lisp.pdf">History of Lisp - John McCarthy (1979)</a></li>
+      <li><a href="https://www.dreamsongs.com/Files/HOPL2-Uncut.pdf">The Evolution of Lisp - Richard P. Gabriel, Guy L.
+          Steele Jr (1993)</a></li>
+      <li><a href="https://www.softwarepreservation.org/projects/LISP/book/Stoyan-Geschichte.pdf">The History of Lisp -
+          Herbert Stoyan</a></li>
+      <li><a href="https://www.softwarepreservation.org/projects/LISP/">History Of Lisp - Paul McJones</a></li>
+      <li><a href="https://www.softwarepreservation.org/projects/LISP/resource/">Lisp History Resources - Paul
+          McJones</a></li>
+    </ul>
+    <h1 id="scheme">Scheme</h1>
+    <p><a href="https://www.scheme.org/">Scheme</a> is a minimalist Lisp <a
+        href="https://standards.scheme.org/official/r0rs.pdf">created at MIT</a> in the 70&#39;s
+      by <a href="https://en.wikipedia.org/wiki/Guy_L._Steele_Jr.">Guy L. Steele Jr.</a> and
+      <a href="https://en.wikipedia.org/wiki/Gerald_Jay_Sussman">Gerald Jay Sussman</a>. It began as a series of
+      <a href="https://research.scheme.org/lambda-papers/">papers</a>, then eventually a <a
+        href="https://dspace.mit.edu/bitstream/handle/1721.1/5794/AIM-349.pdf">report</a>, and
+      subsequently evolved as revisions to the report were made.
+    </p>
+    <p>The minimalism of Scheme makes it well suited both as a teaching language and an embedded extension language in
+      other programs. Scheme&#39;s minimalism
+      also makes it attractive to Lisp implementers, and as a result there is a <a
+        href="http://community.schemewiki.org/?category-implementations">rich ecosystem</a> of Scheme
+      <a href="https://get.scheme.org/">compilers and interpreters</a>.
+    </p>
+    <p>I&#39;ve quite the soft spot for Scheme - it was the first Lisp I learned via SICP, and the programs I&#39;ve
+      written and
+      read tend to have an elegance that&#39;s hard to find elsewhere. There are few programming languages I would
+      describe as
+      beautiful but Scheme is definitely in that list (pun intended).</p>
+    <p>Scheme&#39;s notable for a few different reasons:</p>
+    <ul>
+      <li>A minimalist design with a small but powerful standard library.</li>
+      <li>It was the first Lisp to choose lexical scoping as a default. </li>
+      <li>It supports first class continuations.</li>
+      <li>It facilitates functional programming by requiring implementations to support tail-call optimisation.</li>
+      <li>There are a <em>lot</em> of Scheme implementations, each with their own tradeoffs and benefits. </li>
+      <li>It was the teaching language used by Ableson and Sussman in their classic &quot;Structure and Interpretation
+        of Computer Programs&quot;.</li>
+    </ul>
+    <p>Despite the simplicity of Scheme itself, everything else around it can seem complicated and daunting
+      at a first glance. The next few paragraphs are what I would consider essential context.</p>
+    <p>The &#39;Revisedⁿ Report on the Algorithmic Language Scheme&#39;,
+      (typically abbreviated RⁿRS) is the de-facto Scheme language specification. As of now there is <a
+        href="https://codeberg.org/scheme/r7rs/wiki#report-on-scheme-1975">1 original report</a>
+      and 7 revision documents. I suppose technically 8 revisions given the most recent revision has been split in two.
+      The most commonly talked about <a href="https://standards.scheme.org/">standards</a> are also the most recent: <a
+        href="https://standards.scheme.org/official/r5rs.pdf">R5RS (1998)</a>,
+      <a href="https://standards.scheme.org/official/r6rs.pdf">R6RS (2007)</a>, <a
+        href="https://standards.scheme.org/official/r7rs.pdf">R7RS-small (2013)</a> and
+      <a href="https://codeberg.org/scheme/r7rs">R7RS-large (ongoing)</a>. As mentioned previously R7RS is divided into
+      two parts: <a href="https://r7rs.org/">&quot;...a small language primarily for embedding, education, and research;
+        and a large language to address the practical needs of mainstream software development.&quot;</a>
+    </p>
+    <p>Now this is where things start to get a little hairy. R6RS was (or is) very controversial in the Scheme community
+      for <a href="https://small.r7rs.org/wiki/SixRejection/3/">various reasons</a> that I wont get into here, but to
+      quote Gwen Weinholt&#39;s summary from their
+      <a href="https://weinholt.se/articles/r7rs-vs-r6rs/">post on the topic</a>:
+    </p>
+    <blockquote>
+      <p>R6RS is more demanding on implementers but easier on users. Conversely, R7RS is easier on implementers but more
+        demanding on users.</p>
+    </blockquote>
+    <p>This unsurprisingly resulted in more <a href="https://get.scheme.org/">implementations</a> supporting R7RS than
+      R6RS. </p>
+    <p>Another important thing to understand about Scheme are <a href="https://srfi.schemers.org/">&quot;SRFIs&quot;
+        (Scheme Requests for Implementations)</a>.
+      Due to Scheme&#39;s inherent minimalism and many implementations, coordinating library proposals became essential
+      for
+      writing portable code. There are a bunch of SRFIs and each Schemer will typically have a set of them
+      they commonly use, and I would recommend everyone to have a look through them.</p>
+    <p>So between RnRS&#39;s, SRFIs and a smorgasbord of implementations we find ourselves in a weird position.</p>
+    <ul>
+      <li>The language has <em>multiple</em> standards.</li>
+      <li>The language has <em>many</em> implementations.</li>
+      <li>The implementations can support <em>one or many</em> standards.</li>
+      <li>The implementations can (and often do) <em>extend the language</em> in non-standard ways.</li>
+      <li>The implementations can <em>choose what SRFIs</em> to support.</li>
+    </ul>
+    <p>Due to this complexity and <a href="https://dpk.land/io/r7rswtf">the challenges the R7RS-large</a> working group
+      have faced when
+      reaching agreement, it&#39;s not unusual to see expressed the feeling that Scheme as a standard
+      is dying. I&#39;m not sure I fully believe this myself but only time will tell.</p>
+    <p>If you&#39;re new to Scheme don&#39;t let this discourage you for a second. The trick is to not think about it
+      too much; it&#39;s perfectly fine to pick an implementation
+      and just start having fun hacking.</p>
+    <p>One last thing - Scheme&#39;s minimalism makes it great for embedding as an extension language in other programs.
+      See <a href="https://github.com/ashinn/chibi-scheme">Chibi-Scheme</a> for an example of this.</p>
+    <h2 id="writings">Writings</h2>
+    <p>The writings and videos below are either explicitly about Scheme or incidentally use Scheme as a teaching tool.
+    </p>
+    <p>Classics:</p>
+    <ul>
+      <li><a href="https://research.scheme.org/lambda-papers/">The Lambda Papers - Guy L. Steele Jr. and Gerald Jay
+          Sussman</a></li>
+      <li><a
+          href="https://mitp-content-server.mit.edu/books/content/sectbyfn/books_pres_0/6515/sicp.zip/index.html">Structure
+          and Interpretation of Computer Programs (SICP) - Hal Abelson and Gerald Jay Sussman</a>
+        <ul>
+          <li>SICP isn&#39;t just a Scheme classic but an all time classic.</li>
+        </ul>
+      </li>
+      <li><a href="https://felleisen.org/matthias/BTLS-index.html">The Little Schemer - Daniel P. Friedman and Matthias
+          Felleisen</a></li>
+      <li><a href="https://felleisen.org/matthias/BTSS-index.html">The Seasoned Schemer - Daniel P. Friedman and
+          Matthias Felleisen</a></li>
+      <li><a href="https://mitpress.mit.edu/9780262045490/software-design-for-flexibility/">Software Design for
+          Flexibility - Chris Hanson and Gerald Jay Sussman</a></li>
+    </ul>
+    <p>There are a <em>lot</em> of high quality Scheme learning resources online, many of them free too.</p>
+    <ul>
+      <li><a href="https://people.eecs.berkeley.edu/~bh/ss-toc2.html">Simply Scheme - Brian Harvey and Matthew
+          Wright</a></li>
+      <li><a href="https://www.amazon.co.uk/Scheme-Art-Programming-G-Springer/dp/0262192888">Scheme and the Art of
+          Programming - George Springer and Daniel P. Friedman</a></li>
+      <li><a href="http://ds26gte.github.io/tyscheme/index.html">Teach Yourself Scheme in Fixnum Days - Dorai
+          Sitaram</a></li>
+      <li><a href="https://www.artima.com/weblogs/viewpost.jsp?thread=251474">The Adventures of a Pythonista in
+          Schemeland - Michele Simionato</a></li>
+    </ul>
+    <p>Misc:</p>
+    <ul>
+      <li><a href="https://erkin.party/blog/200715/evolution/">The evolution of a Scheme programmer</a></li>
+      <li><a href="https://learnxinyminutes.com/docs/chicken/">Learn X in Y where X=Chicken</a></li>
+      <li><a href="http://community.schemewiki.org/">Community Scheme Wiki</a></li>
+    </ul>
+    <h2 id="videos">Videos</h2>
+    <ul>
+      <li><a href="https://www.youtube.com/watch?v=_ahvzDzKdB0">Growing a Language - Guy L. Steele Jr.</a>
+        <ul>
+          <li>Not necessarily about Scheme, but relevant in ways I hope are obvious.</li>
+        </ul>
+      </li>
+      <li><a href="https://www.youtube.com/playlist?list=PLE18841CABEA24090">MIT 6.001 SICP (1986)</a>
+        <ul>
+          <li>The classic 1986 SICP lecture series.</li>
+        </ul>
+      </li>
+      <li><a href="https://www.youtube.com/playlist?list=PLgyU3jNA6VjRMB-LXXR9ZWcU3-GCzJPm0">Scheme: Feel the Cool -
+          Andy Balaam</a></li>
+      <li><a href="https://www.youtube.com/watch?v=BMvurzOj9ww">R7RS Large Status and Progress - Daphne
+          Preston-Kendal</a>
+        <ul>
+          <li>Daphne Preston-Kendal is the <a href="https://codeberg.org/scheme/r7rs/wiki">chair of the R7RS working
+              group 2</a>. She&#39;s
+            really good at communicating the state of R7RS, and being chair is a hard task but I&#39;m glad she&#39;s
+            doing it.</li>
+        </ul>
+      </li>
+      <li><a href="https://www.youtube.com/watch?v=OyfBQmvr2Hc">The Most Beautiful Program Ever Written - William
+          Byrd</a></li>
+      <li><a href="https://www.youtube.com/watch?v=DDROSL-gGOo">Unlock Lisp / Scheme&#39;s magic: beginner to
+          Scheme-in-Scheme in one hour - Christine Lemmer-Webber</a>
+        <ul>
+          <li>A very fun introduction to Scheme for beginners.</li>
+        </ul>
+      </li>
+      <li><a href="https://www.youtube.com/watch?v=SrKj4hYic5A">Programming Should Eat Itself - Nada Amin </a></li>
+      <li><a href="https://www.youtube.com/watch?v=uwiaT3MoDVs">Knit, Chisel, Hack: Building Programs in Guile Scheme -
+          Andy Wingo</a></li>
+    </ul>
+    <h2 id="community">Community</h2>
+    <p>Scheme has a relatively small but <a href="https://community.scheme.org/">dedicated community</a>. If you&#39;re
+      coming from a more popular
+      language like JavaScript it might surprise you that discussions usually happen over days
+      instead of minutes. This is perfectly normal.</p>
+    <ul>
+      <li><a href="https://old.reddit.com/r/scheme/">/r/scheme on Reddit</a></li>
+      <li><a href="https://comp.lang.scheme.narkive.com/">comp.lang.scheme</a>
+        <ul>
+          <li>Pretty quiet these days and sometimes spammed, but contains a lot of interesting
+            historic discussions.</li>
+        </ul>
+      </li>
+      <li>IRC: #scheme (and #lisp) on <a href="https://libera.chat/">Libera.Chat</a>
+        <ul>
+          <li>There are various implementation specific channels on Libera too.</li>
+        </ul>
+      </li>
+      <li><a href="https://discord.gg/ZcTYrdx">Scheme Discord</a></li>
+    </ul>
+    <h1 id="common-lisp">Common Lisp</h1>
+    <p>If Scheme is often seen as minimal and academic, Common Lisp in contrast could be considered robust and
+      industrial.
+      Their histories play a significant role in this perception and the history of Common Lisp is quite an interesting
+      one - the curious reader can find out more about it <a href="https://www.dreamsongs.com/Files/Hopl2.pdf">here</a>.
+      Summarising the best I can, in the early 80&#39;s Lisp was highly fragmented. ARPA weren&#39;t that interested in
+      funding multiple projects with
+      incompatible Lisp implementations, so they brought the kingdoms together and from this meeting grew the idea of
+      a common Lisp to rule them all. To this day if someone directly refers to &quot;Lisp&quot; but not in the broad
+      language-family sense,
+      they&#39;re probably talking about Common Lisp. </p>
+    <p>Common Lisp (CL) was ANSI standardised in 1994 and since then has remained remarkably stable.
+      If I needed to write a piece of software I knew wouldn&#39;t give me hassle in 30 years I&#39;d choose Common
+      Lisp.
+      This level of stability is almost unthinkable to a great deal of software developers. </p>
+    <p>Something to note: just because CL is stable doesn&#39;t mean it&#39;s stagnant.
+      There has been a great deal of effort spent on improving the many <a
+        href="https://lisp-lang.org/wiki/article/implementations">Common Lisp implementations</a>,
+      improving the library ecosystem, improving the tooling etc. If you&#39;re coming from a larger and faster moving
+      ecosystem don&#39;t
+      be surprised when you see libraries that were last updated 10 years ago. They&#39;re not dead, they&#39;re just
+      sleeping - if you wake
+      them up they&#39;ll work just as well as the day they were written.</p>
+    <p>I mentioned previously that Common Lisp has many implementations, but the most prominent of them is probably
+      <a href="http://www.sbcl.org/">Steel Bank Common Lisp (SBCL)</a>. SBCL is great, and here&#39;s why:
+    </p>
+    <ul>
+      <li>It&#39;s <a
+          href="http://web.archive.org/web/20211018040529mp_/https://programming-language-benchmarks.vercel.app/lisp">very
+          fast</a>. All the <a
+          href="https://benchmarksgame-team.pages.debian.net/benchmarksgame/measurements/sbcl.html">benchmarks</a>
+        I&#39;ve seen blow similar dynamically typed and garbage collected languages out of the water.</li>
+      <li>It has a powerful and <a href="https://lispcookbook.github.io/cl-cookbook/debugging.html">highly interactive
+          debugger</a>.</li>
+      <li>It comes with <a
+          href="https://lispcookbook.github.io/cl-cookbook/performance.html#know-your-lisps-statistical-profiler">sophisticated
+          profiling tools</a>.</li>
+      <li>It provides support for <a href="https://lispcookbook.github.io/cl-cookbook/process.html">threading.</a></li>
+      <li>It&#39;s <a
+          href="https://old.reddit.com/r/lisp/comments/go3dzr/what_is_image_based_programming/frfg8dp/">image based</a>
+        (google it).</li>
+    </ul>
+    <p>I&#39;m not here to evangalise SBCL but it really is an awesome tool.</p>
+    <p>Something worth mentioning is programming style. Lisps in general are often described as being
+      &quot;functional&quot; languages and this (especially historically) is a huge misconception. Common Lisp is
+      incredibly unopinionated and leaves it entirely up to the programmer to choose how they want to use it. Want to
+      write heavily procedural code? Great! More of a functional programmer? That&#39;s awesome too. Huge OOP fan? The
+      Common Lisp Object System (CLOS) is one of the most sophisticated and robust out there. </p>
+    <h2 id="writings-1">Writings</h2>
+    <p>Despite not considering myself a Common Lisper, it&#39;s a fact that some of the most eye-opening books written
+      about Lisp use Common Lisp as their mode of teaching. </p>
+    <ul>
+      <li><a href="https://www.lispworks.com/documentation/HyperSpec/Front/Contents.htm">CLHS - Common Lisp
+          Hyperspec</a>
+        <ul>
+          <li>The language reference. You&#39;ll get familiar with this quick enough.</li>
+        </ul>
+      </li>
+      <li><a href="https://cl-community-spec.github.io/pages/index.html">CL Community Spec</a>
+        <ul>
+          <li>Like the hyperspec but nicer.</li>
+        </ul>
+      </li>
+      <li><a href="https://lispcookbook.github.io/cl-cookbook/">Common Lisp Cookbook</a></li>
+      <li><a href="https://gigamonkeys.com/book/">Practical Common Lisp - Peter Seibel</a>
+        <ul>
+          <li>The quickest way to get up to speed with Common Lisp if you have previous programming experience.</li>
+        </ul>
+      </li>
+      <li><a href="https://paulgraham.com/acl.html">ANSI Common Lisp - Paul Graham</a></li>
+      <li><a href="https://weitz.de/cl-recipes/">Common Lisp Recipes - Edmund Weitz</a></li>
+      <li><a href="https://paulgraham.com/onlisp.html">On Lisp - Paul Graham</a>
+        <ul>
+          <li><em>The</em> book on advanced lisp techniques.</li>
+        </ul>
+      </li>
+      <li><a href="https://letoverlambda.com/">Let Over Lambda - Doug Hoyte</a>
+        <ul>
+          <li>Spiritual success to &quot;On Lisp&quot;, contains deep and interesting macrology. For the advanced
+            Lisper.</li>
+        </ul>
+      </li>
+      <li><a href="https://en.wikipedia.org/wiki/The_Art_of_the_Metaobject_Protocol">The Art of the Metaobject Protocol
+          - Gregor Kiczales</a>
+        <ul>
+          <li>A deep dive into CLOS. Also not for the faint of heart.</li>
+        </ul>
+      </li>
+      <li><a href="https://www.cs.cmu.edu/~dst/LispBook/">Common Lisp: A Gentle Introduction to Symbolic Computation -
+          David S. Touretzky</a></li>
+      <li><a href="http://landoflisp.com/">Land of Lisp – Conrad Barski</a></li>
+      <li><a href="https://www.cliki.net/">CLiki: The Common Lisp Wiki</a></li>
+    </ul>
+    <h2 id="videos-1">Videos</h2>
+    <ul>
+      <li><a href="https://www.youtube.com/watch?v=m0TsdytmGhc&list=PL2VAYZE_4wRJi_vgpjsH75kMhN4KsuzR_">Little Bits of
+          Lisp - Baggers</a></li>
+      <li><a href="https://www.udemy.com/course/common-lisp-programming/">Common Lisp programming: from novice to
+          effective developer - Vincent Dardel</a></li>
+      <li><a href="https://www.youtube.com/watch?v=VeAdryYZ7ak">Google Talk: Practical Common Lisp - Peter Seibel</a>
+      </li>
+      <li><a href="https://www.youtube.com/watch?v=_ahvzDzKdB0">Growing a Language - Guy L. Steele Jr</a>
+        <ul>
+          <li>Not specifically about Common Lisp, but it&#39;s too good to not mention.</li>
+        </ul>
+      </li>
+      <li><a href="https://www.youtube.com/@GavinFreeborn/videos">Gavin Freeborn</a>
+        <ul>
+          <li>Great YouTube channel.</li>
+        </ul>
+      </li>
+      <li><a href="https://www.youtube.com/watch?v=xyXDE5gP2QI&list=PLCpux10P7KDKPb4eI5b_qSnQaY1ePGKGK">Common Lisp
+          Series - Neil Munro</a></li>
+      <li><a href="https://www.youtube.com/watch?v=HM1Zb3xmvMc">Land of Lisp - The Music Video</a></li>
+      <li><a href="https://www.youtube.com/playlist?list=PLoH3jteqsb2h-F5AHG4XVyZ6GwODX4uVB">BALISP playlist</a></li>
+    </ul>
+    <h2 id="community-1">Community</h2>
+    <p>Common Lisp has a pretty small yet dedicated community. From what I&#39;ve seen from an outside perspective,
+      there&#39;s quite a few regional Common Lisp groups dotted around the world. A first step would be to see if
+      there&#39;s any in your area.</p>
+    <ul>
+      <li><a href="https://old.reddit.com/r/Common_Lisp/">/r/Common_Lisp</a></li>
+      <li><a href="https://discord.com/invite/hhk46CE">CL Discord</a></li>
+      <li><a href="https://european-lisp-symposium.org/index.html">European Lisp Symposium</a></li>
+      <li><a href="https://torlisp.neocities.org/">Toronto Lisp Users Group</a></li>
+      <li><a href="https://www.youtube.com/@atlantafunctionalprogrammi6401/featured">Atlanta Functional Programming</a>
+      </li>
+      <li><a href="https://groups.google.com/g/comp.lang.lisp">comp.lang.lisp</a>
+        <ul>
+          <li>Mostly spammed to death these days, very interesting as an historical record. Reading through the archived
+            posts and seeing 30 year old flame wars is always fun.</li>
+          <li>If you&#39;re interested in the reputation comp.lang.lisp used to have, read this <a
+              href="https://eli.thegreenplace.net/2006/10/27/the-sad-state-of-the-lisp-user-community">19 year old blog
+              post</a>.</li>
+        </ul>
+      </li>
+      <li><a href="https://libera.chat/">IRC: #lisp, #commonlisp on Libera.Chat</a></li>
+      <li><a href="https://github.com/CodyReichert/awesome-cl">Awesome Common Lisp</a></li>
+    </ul>
+    <h1 id="clojure">Clojure</h1>
+    <p>Clojure is the most recent of the language discussed so far, and since its appearance in 2007 has spawned a sort
+      of mini-renaissance of renewed Lisp interest. It&#39;s also the Lisp I&#39;m most fond of for my own personal
+      projects.</p>
+    <p>Here&#39;s some points that set Clojure apart:</p>
+    <ul>
+      <li>Runs on the JVM and can therefore interop with the Java ecosystem.</li>
+      <li>Encourages a functional programming style with immutable data structures.</li>
+      <li>Provides a variety of basic data structures: map, vectors, sets, lists.<ul>
+          <li>Most Lisps only provide one or two. Opinions are divided on whether this is a good thing or not.</li>
+        </ul>
+      </li>
+      <li>The focus on immutable data structures and <a href="https://clojure.org/reference/refs">software transactional
+          memory</a> makes it very pleasant to use for writing concurrent software.</li>
+    </ul>
+    <p>Something else that sets Clojure apart is that its creator, Rich Hickey, is still heavily involved in the
+      language and its community. This is in contrast to other Lisps which tend to be much more committee and community
+      driven. In the Clojure community you&#39;ll see frequent reference to Rich&#39;s talks of which there&#39;s a good
+      few. They&#39;re all worth watching in my opinion.</p>
+    <p>Oh, and there&#39;s also <a href="https://clojurescript.org/">ClojureScript</a>. It&#39;s Clojure that compiles
+      to JavaScript - I haven&#39;t used it much but if that interests you, go for it.</p>
+    <h2 id="writings-2">Writings</h2>
+    <p>Clojure has quite a lot written about it. I&#39;d typically just recommend looking around until you find a
+      resource that matches your tastes.</p>
+    <ul>
+      <li><a href="https://www.amazon.co.uk/Practical-Clojure-Experts-Voice-Source/dp/1430272317">Practical Clojure -
+          Luke VanderHart</a>
+        <ul>
+          <li>It&#39;s quite an early book having been published in 2010. It&#39;ll still be largely relevant but will
+            miss some advanced features such as transducers, spec etc.</li>
+        </ul>
+      </li>
+      <li><a href="https://github.com/ligurio/clojure-from-the-ground-up">Clojure from the Ground Up - Kyle
+          Kingsbury</a></li>
+      <li><a href="https://elementsofclojure.com/">Elements of Clojure - Zachary Tellman</a></li>
+      <li><a href="https://www.braveclojure.com/">Clojure for the Brave and True - Daniel Higginbotham</a></li>
+      <li><a href="https://github.com/functional-koans/clojure-koans">Clojure Koans - Aaron Bedra et al</a></li>
+      <li><a href="https://learnxinyminutes.com/clojure/">Learn X in Y where X = Clojure</a></li>
+      <li><a href="https://gist.github.com/ssrihari/0bf159afb781eef7cc552a1a0b17786f">An Opinionated List of Excellent
+          Clojure Learning Materials - Srihari Sriraman</a></li>
+      <li><a href="https://github.com/mbuczko/awesome-clojure">Awesome Clojure - Michał Buczko</a></li>
+      <li><a href="https://clojure.org/about/history">A History of Clojure - Rich Hickey</a></li>
+    </ul>
+    <h2 id="videos-2">Videos</h2>
+    <p>In my opinion, there&#39;s not a whole lot of really interesting Clojure talks other than the handful from Rich.
+    </p>
+    <ul>
+      <li><a href="https://youtu.be/LKtk3HCgTa8">Simple Made Easy - Rich Hickey</a></li>
+      <li><a href="https://www.youtube.com/watch?v=P76Vbsk_3J0">Clojure for Java Programmers Part 1 - Rich Hickey</a>
+      </li>
+      <li><a href="https://www.youtube.com/watch?v=hb3rurFxrZ8">Clojure for Java Programmers Part 2 - Rich Hickey</a>
+      </li>
+      <li><a href="https://www.youtube.com/playlist?list=PLZdCLR02grLrEwKaZv-5QbUzK0zGKOOcr">Rich Hickey Playlist</a>
+      </li>
+      <li><a href="https://www.youtube.com/watch?v=wASCH_gPnDw">Expert to Expert: Rich Hickey and Brian Beckman - Inside
+          Clojure</a></li>
+      <li><a href="https://www.youtube.com/watch?v=jlPaby7suOc">Every Clojure Talk Ever - Alex Engelberg and Derek
+          Slager</a></li>
+      <li><a href="https://www.youtube.com/watch?v=qxE5wDbt964">Understanding Clojure&#39;s thread macros -
+          Misophistful</a></li>
+    </ul>
+    <h2 id="community-2">Community</h2>
+    <h1 id="racket">Racket</h1>
+    <h2 id="books">Books</h2>
+    <h2 id="videos-3">Videos</h2>
+    <h2 id="community-3">Community</h2>
+    <h2 id="conclusion">Conclusion</h2>
+
+  </div>
+</body>
+
+</html>
