@@ -1,4 +1,4 @@
-Lisp is a family of programming languages with a long, rich and oftentimes confusing tradition.
+[Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)) is a family of programming languages with a long, rich and oftentimes confusing tradition.
 Unware of it at the time, in 1960 John McCarthy published [a paper](https://www-formal.stanford.edu/jmc/recursive.pdf) 
 that over the next 64 years would spawn a thousand dialects and a number of *very* good ideas.
 
@@ -10,7 +10,7 @@ closely mirrors your philosophy on software development.
 The purpose of this post isn't to convince the reader of how great Lisp is; 
 rather, I assume the reader is already somewhat interested and is now trying to 
 figure out which of these dialects is the best fit for them. It also isn't about "which Lisp is the best" type questions, but instead it's just my subjective 
-view of the more prominent Lisp dialects. 
+view of the more prominent Lisp dialects. The most prominent dialects being Scheme, Common Lisp and Clojure.
 
 Tl;dr:
 - If you want a minimalist, elegant Lisp with a strong academic foundation: choose Scheme.
@@ -32,7 +32,7 @@ If the reader isn't already convinced but is still curious, I would recommend re
 
 I mentioned earlier that Lisp's variety is one of it's best qualities, and I stand by that. A side effect of this 
 however is that inter-dialect tribalism is unfortunately common. It's a weird reality that the smallest of differences 
-seem to incite the most vitriol, whether it's with programming language dialects or [Northern Conservative Baptism.](https://www.youtube.com/watch?v=l3fAcxcxoZ8) As an example, of the four languages I'll be talking about I've heard three of them being argued as not-actually-lisps. Can you guess which ones? 
+seem to incite the most vitriol, whether it's with programming language dialects or [Northern Conservative Baptism.](https://www.youtube.com/watch?v=l3fAcxcxoZ8) As an example, of the four mentioned dialects I'll be talking about I've heard three of them being argued as not-actually-lisps. Can you guess which ones? 
 
 Not to leave on a sour note, Lisp also attracts some of the most thoughtful and intelligent people whose willingness
 to openly share their knowledge has changed me for the better. 
@@ -64,7 +64,7 @@ The minimalism of Scheme makes it well suited both as a teaching language and an
 also makes it attractive to Lisp implementers, and as a result there is a [rich ecosystem](http://community.schemewiki.org/?category-implementations) of Scheme 
 [compilers and interpreters](https://get.scheme.org/).
 
-I've quite the soft spot for Scheme - it was the first Lisp I learned via SICP, and the programs I've written and 
+I've quite the soft spot for Scheme - it was the first Lisp I learned via [SICP](https://en.wikipedia.org/wiki/Structure_and_Interpretation_of_Computer_Programs), and the programs I've written and 
 read tend to have an elegance that's hard to find elsewhere. There are few programming languages I would describe as 
 beautiful but Scheme is definitely in that list (pun intended).
 
@@ -99,7 +99,7 @@ This unsurprisingly resulted in more [implementations](https://get.scheme.org/) 
 Another important thing to understand about Scheme are ["SRFIs" (Scheme Requests for Implementations)](https://srfi.schemers.org/).
 Due to Scheme's inherent minimalism and many implementations, coordinating library proposals became essential for
  writing portable code. There are a bunch of SRFIs and each Schemer will typically have a set of them 
-they commonly use, and I would recommend everyone to have a look through them.
+they commonly use.
 
 So between RnRS's, SRFIs and a smorgasbord of implementations we find ourselves in a weird position.
 - The language has *multiple* standards.
