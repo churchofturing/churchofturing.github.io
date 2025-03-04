@@ -347,7 +347,7 @@ There's a very surprising amount of Racket talks - probably because it's a playg
 - [IRC: #racket on Libera.Chat](https://libera.chat/)
 - [Racket Blog](https://blog.racket-lang.org/)
 
-## Honorable Mentions
+# Honorable Mentions
 
 There's a thousands different Lisps and I only really covered the big four. This feels a bit shallow, because it is.
 
@@ -361,7 +361,7 @@ Here's some Lisps that are worth giving a glance and might be right for you depe
 - [Fennel](https://fennel-lang.org/) - Lisp embedded in Lua
 - [Arc](https://paulgraham.com/arc.html) - You must really love HN.
 
-## Conclusion
+# Conclusion
 
 Oh, and to answer the question of which of the previously mentioned Lisps are argued as not-really-lisps:
 

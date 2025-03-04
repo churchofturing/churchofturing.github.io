@@ -14,7 +14,8 @@
       <a href="/">Church Of Turing</a>
     </h1>
     <hr />
-    <p>Lisp is a family of programming languages with a long, rich and oftentimes confusing tradition.
+    <p><a href="https://en.wikipedia.org/wiki/Lisp_(programming_language)">Lisp</a> is a family of programming languages
+      with a long, rich and oftentimes confusing tradition.
       Unware of it at the time, in 1960 John McCarthy published <a
         href="https://www-formal.stanford.edu/jmc/recursive.pdf">a paper</a>
       that over the next 64 years would spawn a thousand dialects and a number of <em>very</em> good ideas.</p>
@@ -27,7 +28,7 @@
       rather, I assume the reader is already somewhat interested and is now trying to
       figure out which of these dialects is the best fit for them. It also isn&#39;t about &quot;which Lisp is the
       best&quot; type questions, but instead it&#39;s just my subjective
-      view of the more prominent Lisp dialects. </p>
+      view of the more prominent Lisp dialects. The most prominent dialects being Scheme, Common Lisp and Clojure.</p>
     <p>Tl;dr:</p>
     <ul>
       <li>If you want a minimalist, elegant Lisp with a strong academic foundation: choose Scheme.</li>
@@ -51,18 +52,14 @@
           Sinclair Target</a></li>
     </ul>
     <h1 id="culture">Culture</h1>
-    <p>I mentioned earlier that Lisp&#39;s diversity is one of it&#39;s best qualities, and I stand by that. A side
-      effect of this
+    <p>I mentioned earlier that Lisp&#39;s variety is one of it&#39;s best qualities, and I stand by that. A side effect
+      of this
       however is that inter-dialect tribalism is unfortunately common. It&#39;s a weird reality that the smallest of
       differences
       seem to incite the most vitriol, whether it&#39;s with programming language dialects or <a
-        href="https://www.youtube.com/watch?v=l3fAcxcxoZ8">Northern Conservative Baptism.</a>.</p>
-    <p>I&#39;ve noticed this kind of anger express itself more when people start to blur the lines between their
-      interests
-      and their identity. At this point it&#39;s difficult to <em>not</em> take technical disagreement as a personal
-      insult. If you do
-      start considering yourself a Lisper, remember that we&#39;re all more similar than we are different
-      and there&#39;s plenty of room for a variety of opinion. </p>
+        href="https://www.youtube.com/watch?v=l3fAcxcxoZ8">Northern Conservative Baptism.</a> As an example, of the four
+      mentioned dialects I&#39;ll be talking about I&#39;ve heard three of them being argued as not-actually-lisps. Can
+      you guess which ones? </p>
     <p>Not to leave on a sour note, Lisp also attracts some of the most thoughtful and intelligent people whose
       willingness
       to openly share their knowledge has changed me for the better. </p>
@@ -99,8 +96,9 @@
         href="http://community.schemewiki.org/?category-implementations">rich ecosystem</a> of Scheme
       <a href="https://get.scheme.org/">compilers and interpreters</a>.
     </p>
-    <p>I&#39;ve quite the soft spot for Scheme - it was the first Lisp I learned via SICP, and the programs I&#39;ve
-      written and
+    <p>I&#39;ve quite the soft spot for Scheme - it was the first Lisp I learned via <a
+        href="https://en.wikipedia.org/wiki/Structure_and_Interpretation_of_Computer_Programs">SICP</a>, and the
+      programs I&#39;ve written and
       read tend to have an elegance that&#39;s hard to find elsewhere. There are few programming languages I would
       describe as
       beautiful but Scheme is definitely in that list (pun intended).</p>
@@ -144,7 +142,7 @@
       Due to Scheme&#39;s inherent minimalism and many implementations, coordinating library proposals became essential
       for
       writing portable code. There are a bunch of SRFIs and each Schemer will typically have a set of them
-      they commonly use, and I would recommend everyone to have a look through them.</p>
+      they commonly use.</p>
     <p>So between RnRS&#39;s, SRFIs and a smorgasbord of implementations we find ourselves in a weird position.</p>
     <ul>
       <li>The language has <em>multiple</em> standards.</li>
@@ -408,6 +406,7 @@
       </li>
       <li>The focus on immutable data structures and <a href="https://clojure.org/reference/refs">software transactional
           memory</a> makes it very pleasant to use for writing concurrent software.</li>
+      <li>A comparatively healthy library ecosystem for writing web services.</li>
     </ul>
     <p>Something else that sets Clojure apart is that its creator, Rich Hickey, is still heavily involved in the
       language and its community. This is in contrast to other Lisps which tend to be much more committee and community
@@ -436,6 +435,7 @@
           Clojure Learning Materials - Srihari Sriraman</a></li>
       <li><a href="https://github.com/mbuczko/awesome-clojure">Awesome Clojure - Michał Buczko</a></li>
       <li><a href="https://clojure.org/about/history">A History of Clojure - Rich Hickey</a></li>
+      <li><a href="https://clojuredocs.org/">ClojureDocs</a></li>
     </ul>
     <h2 id="videos-2">Videos</h2>
     <p>In my opinion, there&#39;s not a whole lot of really interesting Clojure talks other than the handful from Rich.
@@ -456,11 +456,102 @@
           Misophistful</a></li>
     </ul>
     <h2 id="community-2">Community</h2>
+    <p>I&#39;d wager a guess that Clojure is the most popular of the Lisps out there, making it fairly easy to get into
+      the community.</p>
+    <ul>
+      <li><a href="https://old.reddit.com/r/Clojure/">/r/clojure</a></li>
+      <li><a href="https://discord.com/invite/discljord">Clojure Discord (discljord)</a></li>
+      <li><a href="https://groups.google.com/g/clojure">Clojure Google Group</a></li>
+      <li><a href="https://clojure.org/community/resources">Community Resources</a></li>
+      <li><a href="https://ask.clojure.org/">Clojure Forum</a></li>
+      <li><a href="http://clojurians.net/">Clojurians Slack</a></li>
+    </ul>
     <h1 id="racket">Racket</h1>
-    <h2 id="books">Books</h2>
+    <p><a href="https://en.wikipedia.org/wiki/Racket_(programming_language)">Racket</a> is an interesting one. It&#39;s
+      a dialect of Scheme that began in the mid-90s and developed by PLT Inc (which was founded by <a
+        href="https://en.wikipedia.org/wiki/Matthias_Felleisen">Matthias Felleisen</a>). Its main goals were as a tool
+      for teaching and as a playground for programming language research and development - to these ends it&#39;s by all
+      means a great language. It&#39;s often said that Racket has one of the most powerful macro systems amongst the
+      Lisps, and as proof more than a few postgrads have earned their PhDs using it. </p>
+    <p>Up <a
+        href="https://huntnewsnu.com/82511/editorial/op-eds/op-ed-northeasterns-redesign-of-the-khoury-curriculum-abandons-the-fundamentals-of-computer-science/">until
+        very recently</a>, Racket was a significant part of Northeastern University&#39;s &quot;Fundamentals of Computer
+      Science&quot; cirriculum. This is now apparently being phased out in favour of another course that primarily used
+      Python, to mixed <a
+        href="https://old.reddit.com/r/Racket/comments/1hxt0q1/northeastern_abandoning_racket_in_favor_of_python/">reception</a>.
+      I don&#39;t personally have an opinion, but it is interesting to note that this is effectively the same thing that
+      happened to <a href="https://www.wisdomandwonder.com/link/2110/why-mit-switched-from-scheme-to-python">MIT&#39;s
+        introductory 6.001 course</a>. I&#39;ve another blog post brewing about Universities becoming trade schools, but
+      that&#39;s for a different day.</p>
+    <h2 id="writings-3">Writings</h2>
+    <ul>
+      <li><a href="https://htdp.org/2024-11-6/Book/index.html">How to Design Programs, Second Edition - Matthias
+          Felleisen et al.</a>
+        <ul>
+          <li>This book is often described as a more contemporary alternative to the Structure and Interpretation of
+            Computer Programs. It&#39;s a good introduction to programming.</li>
+        </ul>
+      </li>
+      <li><a href="https://nostarch.com/realmofracket.htm">Realm of Racket - Matthias Felleisen</a></li>
+      <li><a href="https://beautifulracket.com/">Beautiful Racket - Matthew Butterick</a>
+        <ul>
+          <li>Amazing, can&#39;t understate how good this is. A certified hood classic.</li>
+        </ul>
+      </li>
+      <li><a href="https://docs.racket-lang.org/guide/index.html">The Racket Guide - Matthew Flatt et al.</a></li>
+      <li><a href="https://www.plai.org/">Programming Languages: Application and Interpretation - Shriram
+          Krishnamurthi</a>
+        <ul>
+          <li>I haven&#39;t read this, at a glance it looks decent.</li>
+        </ul>
+      </li>
+    </ul>
     <h2 id="videos-3">Videos</h2>
+    <p>There&#39;s a very surprising amount of Racket talks - probably because it&#39;s a playground for programming
+      language experimentation and people are excited to share what they&#39;ve did. It&#39;s not something I&#39;ve
+      really dived into, so here&#39;s a few starting recommendations.</p>
+    <ul>
+      <li><a href="https://www.youtube.com/watch?v=qqeteRf2GW8">Racket: A Programming-Language Programming Language -
+          Robby Findler</a></li>
+      <li><a href="https://www.youtube.com/watch?v=z8Pz4bJV3Tk">Language-Oriented Programming with Racket - Matthias
+          Felleisen</a></li>
+      <li><a href="https://www.youtube.com/watch?v=_2qXIDO-cWw">Keynote presentation by Hal Abelson and Gerald Sussman
+          at the fourteenth RacketCon</a>
+        <ul>
+          <li>I managed to catch the live stream, great gesture.</li>
+        </ul>
+      </li>
+      <li><a href="https://www.infoq.com/presentations/Racket/">The Racket Way - Matthew Flatt</a></li>
+    </ul>
     <h2 id="community-3">Community</h2>
-    <h2 id="conclusion">Conclusion</h2>
+    <ul>
+      <li><a href="https://old.reddit.com/r/Racket/">/r/Racket</a></li>
+      <li><a href="https://discordapp.com/invite/6Zq8sH5">Discord</a></li>
+      <li><a href="https://libera.chat/">IRC: #racket on Libera.Chat</a></li>
+      <li><a href="https://blog.racket-lang.org/">Racket Blog</a></li>
+    </ul>
+    <h1 id="honorable-mentions">Honorable Mentions</h1>
+    <p>There&#39;s a thousands different Lisps and I only really covered the big four. This feels a bit shallow, because
+      it is.</p>
+    <p>Here&#39;s some Lisps that are worth giving a glance and might be right for you depending on your interests.</p>
+    <ul>
+      <li><a href="https://www.gnu.org/software/emacs/">Emacs Lisp</a> - I&#39;d rather not.</li>
+      <li><a href="https://jank-lang.org/">Jank</a> - Clojure freed from the JVM.</li>
+      <li><a href="https://hylang.org/">Hy</a> - Python embedded Lisp.</li>
+      <li><a href="https://lfe.io/">LispFlavouredErlang</a> - Love the BEAM but hate Erlang&#39;s prolog derived syntax?
+        This is for you.</li>
+      <li><a href="https://github.com/kanaka/mal">Make A Lisp</a> - Want to make a Lisp?</li>
+      <li><a href="https://fennel-lang.org/">Fennel</a> - Lisp embedded in Lua</li>
+      <li><a href="https://paulgraham.com/arc.html">Arc</a> - You must really love HN.</li>
+    </ul>
+    <h1 id="conclusion">Conclusion</h1>
+    <p>Oh, and to answer the question of which of the previously mentioned Lisps are argued as not-really-lisps:</p>
+    <ul>
+      <li>Clojure, because no Cons cells.</li>
+      <li>Scheme, because <a href="https://groups.google.com/g/comp.lang.lisp/c/Bj8Hx6mZEYI?pli=1">reasons</a>.</li>
+      <li>Racket, because Scheme descendant, see above.</li>
+    </ul>
+    <p>Bit silly in my opinion but it is what it is.</p>
 
   </div>
 </body>
