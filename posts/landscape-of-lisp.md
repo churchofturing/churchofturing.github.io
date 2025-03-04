@@ -10,7 +10,7 @@ closely mirrors your philosophy on software development.
 The purpose of this post isn't to convince the reader of how great Lisp is; 
 rather, I assume the reader is already somewhat interested and is now trying to 
 figure out which of these dialects is the best fit for them. It also isn't about "which Lisp is the best" type questions, but instead it's just my subjective 
-view of the more prominent Lisp dialects. The most prominent dialects being Scheme, Common Lisp and Clojure.
+view of the more prominent Lisp dialects. The most prominent dialects being Scheme, Common Lisp, Racket and Clojure.
 
 Tl;dr:
 - If you want a minimalist, elegant Lisp with a strong academic foundation: choose Scheme.
