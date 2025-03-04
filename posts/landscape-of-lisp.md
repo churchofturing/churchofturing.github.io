@@ -30,14 +30,9 @@ If the reader isn't already convinced but is still curious, I would recommend re
 
 # Culture
 
-I mentioned earlier that Lisp's diversity is one of it's best qualities, and I stand by that. A side effect of this 
+I mentioned earlier that Lisp's variety is one of it's best qualities, and I stand by that. A side effect of this 
 however is that inter-dialect tribalism is unfortunately common. It's a weird reality that the smallest of differences 
-seem to incite the most vitriol, whether it's with programming language dialects or [Northern Conservative Baptism.](https://www.youtube.com/watch?v=l3fAcxcxoZ8)
-
-I've noticed this kind of anger express itself more when people start to blur the lines between their interests
-and their identity. At this point it's difficult to *not* take technical disagreement as a personal insult. If you do 
-start considering yourself a Lisper, remember that we're all more similar than we are different
-and there's plenty of room for a variety of opinion. 
+seem to incite the most vitriol, whether it's with programming language dialects or [Northern Conservative Baptism.](https://www.youtube.com/watch?v=l3fAcxcxoZ8) As an example, of the four languages I'll be talking about I've heard three of them being argued as not-actually-lisps. Can you guess which ones? 
 
 Not to leave on a sour note, Lisp also attracts some of the most thoughtful and intelligent people whose willingness
 to openly share their knowledge has changed me for the better. 
@@ -320,12 +315,58 @@ I'd wager a guess that Clojure is the most popular of the Lisps out there, makin
 
 # Racket
 
-[Racket](https://en.wikipedia.org/wiki/Racket_(programming_language)) is an interesting one. It's a dialect of Scheme that is used mainly as a tool for teaching and as a playground for programming language research and development - to these ends it's by all means a great language. It's often said that Racket has one of the most powerful macro systems amongst the Lisps, and as proof more than a few postgrads have earned their PhDs using it. 
+[Racket](https://en.wikipedia.org/wiki/Racket_(programming_language)) is an interesting one. It's a dialect of Scheme that began in the mid-90s and developed by PLT Inc (which was founded by [Matthias Felleisen](https://en.wikipedia.org/wiki/Matthias_Felleisen)). Its main goals were as a tool for teaching and as a playground for programming language research and development - to these ends it's by all means a great language. It's often said that Racket has one of the most powerful macro systems amongst the Lisps, and as proof more than a few postgrads have earned their PhDs using it. 
 
-## Books
+Up [until very recently](https://huntnewsnu.com/82511/editorial/op-eds/op-ed-northeasterns-redesign-of-the-khoury-curriculum-abandons-the-fundamentals-of-computer-science/), Racket was a significant part of Northeastern University's "Fundamentals of Computer Science" cirriculum. This is now apparently being phased out in favour of another course that primarily used Python, to mixed [reception](https://old.reddit.com/r/Racket/comments/1hxt0q1/northeastern_abandoning_racket_in_favor_of_python/). I don't personally have an opinion, but it is interesting to note that this is effectively the same thing that happened to [MIT's introductory 6.001 course](https://www.wisdomandwonder.com/link/2110/why-mit-switched-from-scheme-to-python). I've another blog post brewing about Universities becoming trade schools, but that's for a different day.
+
+## Writings
+
+- [How to Design Programs, Second Edition - Matthias Felleisen et al.](https://htdp.org/2024-11-6/Book/index.html)
+  - This book is often described as a more contemporary alternative to the Structure and Interpretation of Computer Programs. It's a good introduction to programming.
+- [Realm of Racket - Matthias Felleisen](https://nostarch.com/realmofracket.htm)
+- [Beautiful Racket - Matthew Butterick](https://beautifulracket.com/)
+  - Amazing, can't understate how good this is. A certified hood classic.
+- [The Racket Guide - Matthew Flatt et al.](https://docs.racket-lang.org/guide/index.html)
+- [Programming Languages: Application and Interpretation - Shriram Krishnamurthi](https://www.plai.org/)
+  - I haven't read this, at a glance it looks decent.
 
 ## Videos
 
+There's a very surprising amount of Racket talks - probably because it's a playground for programming language experimentation and people are excited to share what they've did. It's not something I've really dived into, so here's a few starting recommendations.
+
+- [Racket: A Programming-Language Programming Language - Robby Findler](https://www.youtube.com/watch?v=qqeteRf2GW8)
+- [Language-Oriented Programming with Racket - Matthias Felleisen](https://www.youtube.com/watch?v=z8Pz4bJV3Tk)
+- [Keynote presentation by Hal Abelson and Gerald Sussman at the fourteenth RacketCon](https://www.youtube.com/watch?v=_2qXIDO-cWw)
+  - I managed to catch the live stream, great gesture.
+- [The Racket Way - Matthew Flatt](https://www.infoq.com/presentations/Racket/)
+
 ## Community
 
+- [/r/Racket](https://old.reddit.com/r/Racket/)
+- [Discord](https://discordapp.com/invite/6Zq8sH5)
+- [IRC: #racket on Libera.Chat](https://libera.chat/)
+- [Racket Blog](https://blog.racket-lang.org/)
+
+## Honorable Mentions
+
+There's a thousands different Lisps and I only really covered the big four. This feels a bit shallow, because it is.
+
+Here's some Lisps that are worth giving a glance and might be right for you depending on your interests.
+
+- [Emacs Lisp](https://www.gnu.org/software/emacs/) - I'd rather not.
+- [Jank](https://jank-lang.org/) - Clojure freed from the JVM.
+- [Hy](https://hylang.org/) - Python embedded Lisp.
+- [LispFlavouredErlang](https://lfe.io/) - Love the BEAM but hate Erlang's prolog derived syntax? This is for you.
+- [Make A Lisp](https://github.com/kanaka/mal) - Want to make a Lisp?
+- [Fennel](https://fennel-lang.org/) - Lisp embedded in Lua
+- [Arc](https://paulgraham.com/arc.html) - You must really love HN.
+
 ## Conclusion
+
+Oh, and to answer the question of which of the previously mentioned Lisps are argued as not-really-lisps:
+
+- Clojure, because no Cons cells.
+- Scheme, because [reasons](https://groups.google.com/g/comp.lang.lisp/c/Bj8Hx6mZEYI?pli=1).
+- Racket, because Scheme descendant, see above.
+
+Bit silly in my opinion but it is what it is.
