@@ -228,6 +228,7 @@ Despite not considering myself a Common Lisper, it's a fact that some of the mos
 - [Common Lisp: A Gentle Introduction to Symbolic Computation - David S. Touretzky](https://www.cs.cmu.edu/~dst/LispBook/)
 - [Land of Lisp – Conrad Barski](http://landoflisp.com/)
 - [CLiki: The Common Lisp Wiki](https://www.cliki.net/)
+- [Paradigms of AI Programming - Peter Norvig](https://en.wikipedia.org/wiki/Paradigms_of_AI_Programming)
 
 ## Videos
 
@@ -357,7 +358,7 @@ Here's some Lisps that are worth giving a glance and might be right for you depe
 - [Jank](https://jank-lang.org/) - Clojure freed from the JVM.
 - [Hy](https://hylang.org/) - Python embedded Lisp.
 - [LispFlavouredErlang](https://lfe.io/) - Love the BEAM but hate Erlang's prolog derived syntax? This is for you.
-- [Make A Lisp](https://github.com/kanaka/mal) - Want to make a Lisp?
+- [Lisp in Small Pieces - Christian Queinnec](https://www.cambridge.org/core/books/lisp-in-small-pieces/66FD2BE3EDDDC68CA87D652C82CF849E) - Want to make your own Lisp?
 - [Fennel](https://fennel-lang.org/) - Lisp embedded in Lua
 - [Arc](https://paulgraham.com/arc.html) - You must really love HN.
 
@@ -370,3 +371,8 @@ Oh, and to answer the question of which of the previously mentioned Lisps are ar
 - Racket, because Scheme descendant, see above.
 
 Bit silly in my opinion but it is what it is.
+
+# Updates
+
+- 05/03/2025 - Removed MAL from honourable mentions, replaced with Lisp in Small Pieces. Thanks [/u/kagevf](https://old.reddit.com/r/lisp/comments/1j3mcxe/the_landscape_of_lisp/mg2od7c/).
+- 05/03/2025 - Added Norvig's PAIP to CL writings section. Thanks [/u/dmpk2k](https://old.reddit.com/r/lisp/comments/1j3mcxe/the_landscape_of_lisp/mg4l3na/)
