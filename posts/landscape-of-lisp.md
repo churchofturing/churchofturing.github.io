@@ -228,7 +228,7 @@ Despite not considering myself a Common Lisper, it's a fact that some of the mos
 - [Common Lisp: A Gentle Introduction to Symbolic Computation - David S. Touretzky](https://www.cs.cmu.edu/~dst/LispBook/)
 - [Land of Lisp – Conrad Barski](http://landoflisp.com/)
 - [CLiki: The Common Lisp Wiki](https://www.cliki.net/)
-- [Paradigms of AI Programming - Peter Norvig](https://en.wikipedia.org/wiki/Paradigms_of_AI_Programming)
+- [Paradigms of AI Programming - Peter Norvig](https://norvig.github.io/paip-lisp/#/)
 
 ## Videos
 
@@ -266,8 +266,7 @@ Here's some points that set Clojure apart:
 
 - Runs on the JVM and can therefore interop with the Java ecosystem.
 - Encourages a functional programming style with immutable data structures.
-- Provides a variety of basic data structures: map, vectors, sets, lists.
-  - Most Lisps only provide one or two. Opinions are divided on whether this is a good thing or not.
+- Provides a variety of ergonomic, basic data structures: map, vectors, sets, lists.
 - The focus on immutable data structures and [software transactional memory](https://clojure.org/reference/refs) makes it very pleasant to use for writing concurrent software.
 - A comparatively healthy library ecosystem for writing web services.
 
