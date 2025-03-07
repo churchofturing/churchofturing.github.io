@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+  <channel>
+    <title>Church Of Turing - CS Hangout</title>
+    <link>https://churchofturing.github.io/</link>
+    <description>My infrequently updated thoughts.</description>
+    <language>en-uk</language>
+    <lastBuildDate>Fri, 07 Mar 2025 20:25:00 GMT</lastBuildDate>
+    <pubDate>Fri, 07 Mar 2025 20:25:00 GMT</pubDate>
+
+    <item>
+      <title>Closures: An Introduction </title>
+      <link>https://churchofturing.github.io/closures.html</link>
+      <description>A short introduction to closures.</description>
+      <pubDate>Mon, 12 Feb 2024 09:00:00 GMT</pubDate>
+      <guid>https://churchofturing.github.io/closures.html</guid>
+    </item>
+
+    <item>
+      <title>The Landscape of Lisp</title>
+      <link>https://churchofturing.github.io/landscapeoflisp.html</link>
+      <description>A brief introduction to the major Lisp dialects.</description>
+      <pubDate>Tue, 04 Mar 2025 15:30:00 GMT</pubDate>
+      <guid>https://churchofturing.github.io/landscapeoflisp.html</guid>
+    </item>
+  </channel>
+</rss>
