@@ -31,8 +31,8 @@
       rather, I assume the reader is already somewhat interested and is now trying to
       figure out which of these dialects is the best fit for them. It also isn&#39;t about &quot;which Lisp is the
       best&quot; type questions, but instead it&#39;s just my subjective
-      view of the more prominent Lisp dialects. The most prominent dialects being Scheme, Common Lisp, Racket and
-      Clojure.</p>
+      view of the more prominent Lisp dialects. The most prominent dialects being Scheme, Common Lisp, Racket, Clojure
+      and Emacs Lisp.</p>
     <p>Tl;dr:</p>
     <ul>
       <li>If you want a minimalist, elegant Lisp with a strong academic foundation: choose Scheme.</li>
@@ -41,6 +41,7 @@
       <li>If you want a modern Lisp with functional programming, concurrency, and JVM interop: choose Clojure.</li>
       <li>If you want a beginner-friendly Lisp with great tooling and a focus on education and extensibility: choose
         Racket.</li>
+      <li>If you want to extend Emacs, choose Emacs Lisp.</li>
     </ul>
     <p>If the reader isn&#39;t already convinced but is still curious, I would recommend reading the following articles:
     </p>
@@ -532,12 +533,85 @@
       <li><a href="https://libera.chat/">IRC: #racket on Libera.Chat</a></li>
       <li><a href="https://blog.racket-lang.org/">Racket Blog</a></li>
     </ul>
+    <h1 id="emacs-and-emacs-lisp">Emacs and Emacs Lisp</h1>
+    <p>Emacs is probably the most unusual platform/Lisp that I&#39;ll be talking about. <a
+        href="https://en.wikipedia.org/wiki/Emacs">Emacs</a> is technically a family of text editors with the most
+      popular being <a href="https://www.gnu.org/software/emacs/">GNU Emacs</a>. There are other prominent
+      variants/forks that I wont get in to, so going forward if I refer to &quot;Emacs&quot; I really mean &quot;GNU
+      Emacs&quot;. </p>
+    <p>Emacs was started in 1984 by <a href="https://www.stallman.org/">Richard Stallman</a> who was looking to create a
+      free software alternative to the proprietary <a href="https://en.wikipedia.org/wiki/Gosling_Emacs">Gosling
+        Emacs</a>. What sets Emacs apart from other editors is how extremely exstensible it is - writing plugins and
+      changing the editor&#39;s behaviour is trivially easy using the built in <a
+        href="https://en.wikipedia.org/wiki/Emacs_Lisp">Emacs Lisp</a> programming language. The price you pay for this
+      power is the steep learning curve, one which I&#39;ve never really been able to scale. Emacs isn&#39;t for
+      everyone.</p>
+    <p>If you know nothing of Emacs it probably sounds fairly uninteresting so far. It&#39;s an editor with a scripting
+      language, so what? With how extensible Emacs is, calling it just a text editor is doing it a disservice. Over the
+      years it&#39;s been extended to the point where you can:</p>
+    <ul>
+      <li><a href="https://www.masteringemacs.org/article/fun-games-in-emacs">Play games</a></li>
+      <li><a href="https://en.wikipedia.org/wiki/Eww_(web_browser)">Browse the internet</a></li>
+      <li><a href="http://www.mycpu.org/read-email-in-emacs/">Send Emails</a></li>
+      <li><a href="https://old.reddit.com/r/emacs/comments/4srze9/watching_youtube_inside_emacs_25/">Watch YouTube</a>
+      </li>
+    </ul>
+    <p>It&#39;s not unusual for someone fully engrossed in Emacs to rarely leave it. Some of the tools written for Emacs
+      are considered so high quality that you&#39;ll struggle to find something as good outside of Emacs. To name a few:
+    </p>
+    <ul>
+      <li><a href="https://magit.vc/">Magit</a></li>
+      <li><a href="https://orgmode.org/">Org Mode</a></li>
+      <li><a href="https://github.com/joaotavora/sly">Sly</a></li>
+      <li><a href="https://www.cliki.net/SLIME">SLIME</a></li>
+      <li><a href="https://github.com/bbatsov/projectile">Projectile</a></li>
+      <li><a href="https://github.com/emacs-tw/awesome-emacs">And much more</a></li>
+    </ul>
+    <p>Emacs is unsurprisingly popular in the Lisp community. As a result it&#39;s not unusual for it to have some of
+      the highest quality tooling for programming Lisps. In my opinion this is a bit of a double edged sword in that
+      tooling for editing Lisp outside of Emacs has been somewhat neglected, and the one-two punch of being expected to
+      learn Emacs on top of learning a Lisp can filter people out.</p>
+    <p>I&#39;ve not really talked about Emacs Lisp itself yet. Emacs Lisp is a curious language, quite unlike Common
+      Lisp and Scheme, being most closely related to the earlier <a
+        href="https://en.wikipedia.org/wiki/Maclisp">MacLisp</a>. One of the major differences that I alluded to earlier
+      was that it&#39;s <a
+        href="https://stackoverflow.com/questions/3786033/how-to-live-with-emacs-lisp-dynamic-scoping">dynamically
+        scoped</a> instead of lexically scoped. This is quite a departure from a majority of contemporary Lisps. Aside
+      from this it&#39;s not too difficult of a Lisp to pick up. The hardest part will be understanding how Emacs Lisp
+      interacts with the editor.</p>
+    <h2 id="writings-4">Writings</h2>
+    <ul>
+      <li><a href="https://www.masteringemacs.org/">Mastering Emacs - Mickey Petersen</a></li>
+      <li><a href="https://www.gnu.org/software/emacs/manual/eintr.html">An Introduction to Programming in Emacs
+          Lisp</a>
+        <ul>
+          <li>This comes bundled with Emacs.</li>
+        </ul>
+      </li>
+      <li><a href="https://www.emacswiki.org/emacs/LearningEmacs">Learning Emacs - EmacsWiki</a></li>
+      <li><a href="https://learnxinyminutes.com/elisp/">Learn X in Y where X = Emacs Lisp</a></li>
+      <li><a href="https://github.com/xuchunyang/elisp-demos">Elisp API Demos - Xu Chunyang</a></li>
+      <li><a href="https://sachachua.com/blog/2013/05/how-to-learn-emacs-a-hand-drawn-one-pager-for-beginners/">How to
+          Learn Emacs: A Hand-drawn One-pager for Beginners / A visual tutorial - Sacha Chua</a></li>
+    </ul>
+    <h2 id="videos-4">Videos</h2>
+    <ul>
+      <li><a href="https://www.youtube.com/playlist?list=PLVfFIUHWy-aNaF08m34sO81dsVr4L7uI-">Emacs Rocks</a></li>
+      <li><a href="https://www.youtube.com/@SystemCrafters/featured">SystemCrafters</a></li>
+      <li><a href="https://www.youtube.com/watch?v=48JlgiBpw_I&pp=ygUOZW1hY3MgdHV0b3JpYWw%3D">The Absolute
+          Beginner&#39;s Guide to Emacs - SystemCrafters</a></li>
+    </ul>
+    <h2 id="community-4">Community</h2>
+    <ul>
+      <li><a href="https://old.reddit.com/r/emacs/">/r/emacs</a></li>
+      <li><a href="https://emacs.stackexchange.com/">Emacs StackExchange</a></li>
+      <li><a href="https://libera.chat/">IRC: #emacs on Libera.Chat</a></li>
+    </ul>
     <h1 id="honorable-mentions">Honorable Mentions</h1>
     <p>There&#39;s a thousands different Lisps and I only really covered the big four. This feels a bit shallow, because
       it is.</p>
     <p>Here&#39;s some Lisps that are worth giving a glance and might be right for you depending on your interests.</p>
     <ul>
-      <li><a href="https://www.gnu.org/software/emacs/">Emacs Lisp</a> - I&#39;d rather not.</li>
       <li><a href="https://jank-lang.org/">Jank</a> - Clojure freed from the JVM.</li>
       <li><a href="https://hylang.org/">Hy</a> - Python embedded Lisp.</li>
       <li><a href="https://lfe.io/">LispFlavouredErlang</a> - Love the BEAM but hate Erlang&#39;s prolog derived syntax?
@@ -560,7 +634,9 @@
       <li>05/03/2025 - Removed MAL from honourable mentions, replaced with Lisp in Small Pieces. Thanks <a
           href="https://old.reddit.com/r/lisp/comments/1j3mcxe/the_landscape_of_lisp/mg2od7c/">/u/kagevf</a>.</li>
       <li>05/03/2025 - Added Norvig&#39;s PAIP to CL writings section. Thanks <a
-          href="https://old.reddit.com/r/lisp/comments/1j3mcxe/the_landscape_of_lisp/mg4l3na/">/u/dmpk2k</a></li>
+          href="https://old.reddit.com/r/lisp/comments/1j3mcxe/the_landscape_of_lisp/mg4l3na/">/u/dmpk2k</a>.</li>
+      <li>09/03/2025 - As it was rightfully pointed out to me (multiple times), no Landscape of Lisp is complete without
+        its own Emacs section.</li>
     </ul>
 
   </div>
