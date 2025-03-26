@@ -23,5 +23,13 @@
       <pubDate>Tue, 04 Mar 2025 15:30:00 GMT</pubDate>
       <guid>https://churchofturing.github.io/landscapeoflisp.html</guid>
     </item>
+
+    <item>
+      <title>The Problem Is...</title>
+      <link>https://churchofturing.github.io/theproblemis.html</link>
+      <description>What's the problem? I'm not quite sure.</description>
+      <pubDate>Wed, 26 Mar 2025 21:00:00 GMT</pubDate>
+      <guid>https://churchofturing.github.io/closures.html</guid>
+    </item>
   </channel>
 </rss>
