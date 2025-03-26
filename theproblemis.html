@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Church Of Turing - The Problem Is...</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+</head>
+
+<body>
+  <div class="container">
+    <h1 class="name">
+      <a href="/">Church Of Turing</a>
+    </h1>
+    <i>26/03/2025</i>
+    <hr />
+    <h1 id="the-problem-is">The Problem Is...</h1>
+    <p>Picture this. It&#39;s 4pm on a Friday and you&#39;re stuck in a Teams meeting you&#39;re barely paying attention
+      to.
+      As you&#39;re about to phase out of consciousness your coworker drops the coldest line you&#39;ve ever heard:</p>
+    <blockquote>
+      <p>&quot;See, the problem is...&quot;</p>
+    </blockquote>
+    <p>You feel butterflies in your stomach at the prospect of the problem finally being identified. You want to cry,
+      laugh, hug a family member, high five a stranger - something to release this overwhelming surge of emotions.</p>
+    <p>You need a distraction, so you go to <a
+        href="https://old.reddit.com/r/programming/">old.reddit.com/r/programming</a> and mindlessly click the first
+      post you see. The top comment is from a distinguished scholar you recognise, one u/shartboi420. His comment starts
+      with &quot;I think the problem is...&quot;. A cold sweat emerges as you begin to notice a pattern. Two problems
+      identified in one day. Is this even possible?</p>
+    <hr>
+    <p>What sparked this post was seeing some variation of the phrase &quot;the problem is...&quot; five times in a
+      single work day. When I thought the worst was over me Reddit delivered the coup de grâce. Now I was determined to
+      find out how many problems have been identified on /r/programming and who exactly is the best problem identifier.
+    </p>
+    <p>First I would need access to the dataset of all comments on /r/programming. At a glance <a
+        href="https://pushshift.io/signup">Pushshift</a> seemed like the right choice, except they require that
+      you&#39;re a moderator and unfortuntely life hasn&#39;t been so kind to me yet.</p>
+    <p>After some digging around I came across this very helpful <a
+        href="https://old.reddit.com/r/pushshift/comments/1itme1k/separate_dump_files_for_the_top_40k_subreddits/">post
+        by u/Watchful1.</a> It&#39;s a torrent with a dump file for the submissions and comments of the top 40 thousand
+      most popular subreddits, exactly what I needed. It seems to be a fairly complete dataset from the start of Reddit
+      until the end of 2024. They even generously included a <a
+        href="https://github.com/Watchful1/PushshiftDumps/blob/master/scripts/filter_file.py">script</a> that after some
+      slight modification did exactly what I needed.</p>
+    <p>After downloading the comments for /r/programming and slightly modifying the script to search for occurences of
+      &quot;the problem is&quot;, I was finally ready. </p>
+    <p>I started the script and 81 seconds later had produced my life&#39;s work. <a
+        href="the_problem.csv">the_problem.csv</a>. It&#39;s a CSV containing every problem identified on
+      /r/programming, around <strong>36,267</strong> in total. The overall number of comments scanned was
+      <strong>8,056,545</strong>, meaning that comments containing &quot;the problem is&quot; make up approximately
+      <strong>0.45%</strong> of all /r/programming comments. I&#39;m not sure if this is higher or lower than I
+      expected, but it still feels like too many.</p>
+    <p>So now I know how many problems have been identified, but now I want to know who&#39;s identifying them. So lets
+      get the top 10 problem identifiers (including u/[deleted]). Fortunately this was trivial using Python.</p>
+    <pre><code>import csv
+from collections import Counter
+
+counts = Counter()
+
+with open(&quot;the_problem.csv&quot;, &quot;r&quot;, encoding=&quot;utf-8&quot;) as f:
+  reader = csv.reader(f)
+  for row in reader:
+    counts[row[2]] += 1
+
+# The top is always u/[deleted].
+# So we get the top 11 instead.
+top_11 = counts.most_common(11)
+
+for value, count in top_11:
+  print(f&quot;{value}: {count}&quot;)</code></pre>
+    <p>Drumroll please...</p>
+    <ol>
+      <li>
+        <p>u/grauenwolf: 298</p>
+      </li>
+      <li>
+        <p>u/lookmeat: 204</p>
+      </li>
+      <li>
+        <p>u/dnew: 184</p>
+      </li>
+      <li>
+        <p>u/G_Morgan: 175</p>
+      </li>
+      <li>
+        <p>u/yogthos: 175</p>
+      </li>
+      <li>
+        <p>u/matthieum: 136</p>
+      </li>
+      <li>
+        <p>u/pron98: 130</p>
+      </li>
+      <li>
+        <p>u/killerstorm: 107</p>
+      </li>
+      <li>
+        <p>u/mirhagk: 107</p>
+      </li>
+      <li>
+        <p>u/MarshallBanana: 103</p>
+      </li>
+    </ol>
+    <p>Congratulations to <a href="https://old.reddit.com/user/grauenwolf">u/grauenwolf</a>, you&#39;re the winner of
+      the coveted title of Chief Problem Identifier! The problem is I have nothing to give you. Also well done to our
+      runner ups, keep at it and we&#39;ll be out of problems in no time.</p>
+    <hr>
+    <ul>
+      <li>Yes, this is a non-serious shitpost born out of frustration at a common turn of phrase.</li>
+      <li>You&#39;re right, it isn&#39;t rigorous and I didn&#39;t accomodate for false positives and quoted replies.
+      </li>
+    </ul>
+
+  </div>
+</body>
+
+</html>
