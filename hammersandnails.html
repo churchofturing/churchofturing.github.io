@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Church Of Turing - The Landscape of Lisp</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link href="themes/papercolor-light.min.css" rel="stylesheet" media="(prefers-color-scheme: light)" />
+  <link href="themes/atom-one-dark.min.css" rel="stylesheet" media="(prefers-color-scheme: dark)" />
+  <link href="hljs-reset.css" rel="stylesheet" />
+</head>
+
+<body>
+  <div class="container">
+    <h1 class="name">
+      <a href="/">Church Of Turing</a>
+    </h1>
+    <i>12/04s/2025</i>
+    <hr />
+    <h1 id="on-hammers-and-nails">On Hammers and Nails</h1>
+    <blockquote>
+    <p><em>&quot;it is tempting, if the only tool you have is a hammer, to treat everything as if it were a nail.&quot;</em> - Abraham Maslow</p>
+    </blockquote>
+    <p>I had a small problem. I recently went through some bookmarks I had made last year only to discover a large portion of them now 404. For some of the sites this wasn&#39;t a huge issue as I could simply just use the <a href="http://web.archive.org/">Wayback Machine</a>, but there were a few that don&#39;t seem to have been backed up anywhere. This is a shame.</p>
+    <p>What I needed was something that could:</p>
+    <ul>
+    <li>Keep a list of webpages I want to bookmark.</li>
+    <li>Create a snapshot of the webpage when I bookmark it.</li>
+    <li>Serve the webpage archive back to me.</li>
+    </ul>
+    <p>Being the professional webshit that I am, I immediately started solutionising.</p>
+    <ul>
+    <li>I need to build a web application.</li>
+    <li>The web application needs to be interactive and easy to extend, so with my experience in React it felt like an obvious choice.</li>
+    <li>I need a database to store bookmark information, and given I&#39;ve used Postgres in the past why would I choose something else?</li>
+    <li>Deploying it could be a little awkward so I need to containerise the project using Docker. </li>
+    <li>I need to host this somewhere so I could use my Raspberry Pi.</li>
+    </ul>
+    <p>Luckily before I went down any of these ill informed rabbit holes I realised I was doing was stupid. It was as clear as day. </p>
+    <p><em>&quot;This could be a shell script.&quot;</em></p>
+    <p>And so it was.</p>
+    <pre><code class="language-bash">#!/bin/bash
+
+# MIT License
+# 
+# Copyright (c) [2025] [ChurchOfTuring]
+# 
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the &quot;Software&quot;), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+BOOKMARK_DIR=&quot;$HOME/bookmarks&quot;
+BOOKMARK_FILE=&quot;$BOOKMARK_DIR/bookmarks.txt&quot;
+PAGES_DIR=&quot;$BOOKMARK_DIR/pages&quot;
+
+setup() {
+  mkdir -p &quot;$BOOKMARK_DIR&quot;
+  mkdir -p &quot;$PAGES_DIR&quot;
+  touch &quot;$BOOKMARK_FILE&quot;
+}
+
+show_help() {
+  echo &quot;bookmark.sh - A simple bookmark archive manager.&quot;
+  echo &quot;&quot;
+  echo &quot;Usage:&quot;
+  echo &quot;  ./bookmark.sh add URL [NAME]      - Add a bookmark with optional custom name.&quot;
+  echo &quot;  ./bookmark.sh list                - List all bookmarks.&quot;
+  echo &quot;  ./bookmark.sh remove NAME         - Remove a bookmark by name.&quot;
+  echo &quot;  ./bookmark.sh clean               - Remove all downloaded files and bookmarks.&quot;
+  echo &quot;  ./bookmark.sh help                - Show this help message.&quot;
+  echo &quot;  ./bookmark.sh sanity              - Checks if you have the required dependencies.&quot;
+  echo &quot;  ./bookmark.sh serve [PORT|8080]   - Serve the saved pages with an optional port.&quot;
+  echo &quot;&quot;
+  echo &quot;All bookmarks and pages are relative to \$BOOKMARK_DIR ($BOOKMARK_DIR).&quot;
+  echo &quot;Feel free to change \$BOOKMARK_DIR.&quot;
+}
+
+add_bookmark() {
+  local url=&quot;$1&quot;
+  local name=&quot;$2&quot;
+  
+  # If no name is provided, extract it from the URL.
+  if [ -z &quot;$name&quot; ]; then
+    name=$(echo &quot;$url&quot; | sed -E &#39;s/https?:\/\/(www\.)?//g&#39; | sed -E &#39;s/\/.*//g&#39;)
+  fi
+  
+  # Check if name already exists.
+  if grep -q &quot;^$name|&quot; &quot;$BOOKMARK_FILE&quot;; then
+      echo &quot;Error: Bookmark with name &#39;$name&#39; already exists.&quot;
+      return 1
+  fi
+  
+  echo &quot;$name|$url&quot; &gt;&gt; &quot;$BOOKMARK_FILE&quot;
+  
+  local bookmark_page_dir=&quot;$PAGES_DIR/$name&quot;
+  mkdir -p &quot;$bookmark_page_dir&quot;
+  
+  echo &quot;Downloading [$url] to $bookmark_page_dir.&quot;
+
+  wget --no-verbose \
+    --recursive \
+    --convert-links \
+    --page-requisites \
+    --html-extension \
+    --no-host-directories \
+    --restrict-file-names=windows \
+    --no-parent \
+    -P &quot;$bookmark_page_dir&quot; \
+    &quot;$url&quot;
+    
+  echo &quot;Bookmark &#39;$name&#39; added successfully!&quot;
+}
+
+list_bookmarks() {
+  if [ ! -s &quot;$BOOKMARK_FILE&quot; ]; then
+    echo &quot;No bookmarks found.&quot;
+    return
+  fi
+
+  while IFS=&quot;|&quot; read -r name url; do
+    echo &quot;[$name] - $url&quot;
+  done &lt; &quot;$BOOKMARK_FILE&quot;
+}
+
+remove_bookmark() {
+  local name=&quot;$1&quot;
+  
+  if ! grep -q &quot;^$name|&quot; &quot;$BOOKMARK_FILE&quot;; then
+    echo &quot;Error: Bookmark &#39;$name&#39; not found.&quot;
+    return 1
+  fi
+  
+  # Remove from bookmarks file
+  grep -v &quot;^$name|&quot; &quot;$BOOKMARK_FILE&quot; &gt; &quot;$BOOKMARK_FILE.tmp&quot;
+  mv &quot;$BOOKMARK_FILE.tmp&quot; &quot;$BOOKMARK_FILE&quot;
+  
+  # Remove downloaded files
+  if [ -d &quot;$PAGES_DIR/$name&quot; ]; then
+    rm -rf &quot;$PAGES_DIR/$name&quot;
+    echo &quot;Removed files for &#39;$name&#39;.&quot;
+  fi
+  
+  echo &quot;Bookmark &#39;$name&#39; removed successfully.&quot;
+}
+
+# Clears the bookmark file and pages directory.
+clean_files() {
+  read -p &quot;This will remove all downloaded pages and bookmarks. Continue? (y/n): &quot; confirm
+  
+  if [ &quot;$confirm&quot; != &quot;y&quot; ]; then
+    echo &quot;Operation cancelled.&quot;
+    return
+  fi
+  
+  rm -rf &quot;$PAGES_DIR&quot;/*
+  rm &quot;$BOOKMARK_FILE&quot;
+  mkdir -p &quot;$PAGES_DIR&quot;
+  
+  echo &quot;All downloaded files and bookmarks have been removed.&quot;
+}
+
+# Serve the pages directory using python.
+serve_directory() {
+  local port=&quot;${1:-8080}&quot;
+  python3 -m http.server $port --d $PAGES_DIR
+}
+
+# Checks we have wget and python installed. 
+sanity_check() {
+  local missing=()
+
+  if ! command -v wget &amp;&gt;/dev/null; then
+    missing+=(&quot;wget&quot;)
+  fi
+
+  if ! command -v python3 &amp;&gt;/dev/null; then
+    missing+=(&quot;python3&quot;)
+  fi
+
+  if [ ${#missing[@]} -eq 0 ]; then
+    echo &quot;All dependencies are installed.&quot;
+    return 0
+  else
+    echo &quot;Missing dependencies: ${missing[*]}.&quot;
+    return 1
+  fi
+}
+
+# Main function that handles dispatching subcommands.
+main() {
+  setup
+  
+  local command=&quot;$1&quot;
+  shift
+  
+  case &quot;$command&quot; in
+    add)
+      if [ -z &quot;$1&quot; ]; then
+        echo &quot;Error: URL is required.&quot;
+        echo &quot;&quot;
+        show_help
+        exit 1
+      fi
+      add_bookmark &quot;$1&quot; &quot;$2&quot;
+      ;;
+    list)
+      list_bookmarks
+      ;;
+    remove)
+      if [ -z &quot;$1&quot; ]; then
+        echo &quot;Error: Bookmark name is required.&quot;
+        echo &quot;&quot;
+        show_help
+        exit 1
+      fi
+      remove_bookmark &quot;$1&quot;
+      ;;
+    clean)
+      clean_files
+      ;;
+    serve)
+      serve_directory &quot;$1&quot;
+      ;;
+    sanity)
+      sanity_check
+      ;;
+    help|&quot;&quot;)
+      show_help
+      ;;
+    *)
+      echo &quot;Error: Unknown command &#39;$command&#39;.&quot;
+      echo &quot;&quot;
+      show_help
+      exit 1
+      ;;
+  esac
+}
+
+main &quot;$@&quot;</code></pre>
+    <ul>
+    <li>It creates a text file that stores the list of bookmarks.</li>
+    <li>Pages can be bookmarked and deleted. </li>
+    <li>When a bookmark is added, wget is used to store a snapshot of the page.</li>
+    <li>Using <code>bookmark.sh serve 9000</code> we can serve the directory of bookmarked pages on localhost:9000.</li>
+    </ul>
+    <h1 id="conclusion">Conclusion</h1>
+    <p>I spend all day writing web services, so it felt like building a fully fledged web application was a very natural solution to the problem at hand. This was a fallacy. The amount of complexity in the initial solution was magnitudes higher than the problem ever justified, and I had fell into the psychological trap that Maslow had articulated nearly 60 years ago. </p>
+    <p>I&#39;m not kicking myself over it, but it&#39;s a good reminder to take stock of your mental hammers. It also highlights how important it is to have a good repertoire of tools at hand as it&#39;s your tools that ultimately define your approach to solving problems. </p>    
+
+    <script src="highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+  </div>
+</body>
+
+</html>

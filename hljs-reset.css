@@ -1,0 +1,55 @@
+.hljs {
+  background: none;
+}
+
+pre {
+  padding-top: 0;
+}
+
+pre code.hljs {
+  padding: 0;
+}
+
+pre code.hljs, 
+code.hljs, 
+.hljs, 
+.hljs-comment,
+.hljs-tag,
+.hljs-punctuation,
+.hljs-tag .hljs-name,
+.hljs-tag .hljs-attr,
+.hljs-keyword,
+.hljs-attribute,
+.hljs-selector-tag,
+.hljs-meta .hljs-keyword,
+.hljs-doctag,
+.hljs-name,
+.hljs-type,
+.hljs-string,
+.hljs-number,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-quote,
+.hljs-template-tag,
+.hljs-deletion,
+.hljs-title,
+.hljs-section,
+.hljs-regexp,
+.hljs-symbol,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-link,
+.hljs-selector-attr,
+.hljs-operator,
+.hljs-selector-pseudo,
+.hljs-literal,
+.hljs-built_in,
+.hljs-bullet,
+.hljs-code,
+.hljs-addition,
+.hljs-meta,
+.hljs-meta .hljs-string,
+.hljs-emphasis,
+.hljs-strong {
+  font-family: 'Fira Mono', monospace;
+}

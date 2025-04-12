@@ -29,7 +29,15 @@
       <link>https://churchofturing.github.io/theproblemis.html</link>
       <description>What's the problem? I'm not quite sure.</description>
       <pubDate>Wed, 26 Mar 2025 21:00:00 GMT</pubDate>
-      <guid>https://churchofturing.github.io/closures.html</guid>
+      <guid>https://churchofturing.github.io/theproblemis.html</guid>
+    </item>
+
+    <item>
+      <title>On Hammers and Nails</title>
+      <link>https://churchofturing.github.io/hammersandnails.html</link>
+      <description>Reflecting on my own assumptions and the rabbitholes they can lead to.</description>
+      <pubDate>Sun, 12 Apr 2025 19:00:00 GMT</pubDate>
+      <guid>https://churchofturing.github.io/hammersandnails.html</guid>
     </item>
   </channel>
 </rss>
