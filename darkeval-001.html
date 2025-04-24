@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Church Of Turing - DarkEval 001</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link href="themes/papercolor-light.min.css" rel="stylesheet" media="(prefers-color-scheme: light)" />
+  <link href="themes/atom-one-dark.min.css" rel="stylesheet" media="(prefers-color-scheme: dark)" />
+  <link href="hljs-reset.css" rel="stylesheet" />
+</head>
+
+<body>
+  <div class="container">
+    <h1 class="name">
+      <a href="/">Church Of Turing</a>
+    </h1>
+    <i>24/04/2025</i>
+    <hr />
+
+    <h1 id="darkeval">DarkEval</h1>
+    <p>Over the last week or so I&#39;ve been building a little text adventure with a twist. It&#39;s like a traditional text adventure RPG, except 
+    all interactions with the world are carried out through a Clojure REPL. In a sense it&#39;s a hybrid between a text advenure, idle game and programming game. At the moment I&#39;ve implemented fishing, cooking and combat.</p>
+    <p>Because everything is Clojure, the game encourages you to script however you want.</p>
+    <p>Here&#39;s a quick look at the API so far.</p>
+    <h2 id="inspecting-yourself">Inspecting yourself.</h2>
+    <pre><code class="language-clojure">;; (check-yoself)
+{:success true,
+  :results
+  [{:type :CHECK_YOSELF,
+    :message &quot;After some deep introspection you come to the conclusion...&quot;,
+    :data
+    {:stats
+    {:hp {:xp 1154, :level 10, :value 10},
+      :dexterity {:xp 0, :level 1},
+      :strength {:xp 0, :level 1},
+      :grit {:xp 0, :level 1},
+      :mining {:xp 0, :level 1},
+      :smithing {:xp 0, :level 1},
+      :fishing {:xp 0, :level 1},
+      :cooking {:xp 0, :level 1}},
+    :equipment
+    {:head nil,
+      :torso nil,
+      :neck nil,
+      :legs nil,
+      :feet nil,
+      :main-hand nil,
+      :off-hand nil}}}],
+  :errors nil}</code></pre>
+    <hr>
+    <h2 id="looking">Looking</h2>
+    <pre><code class="language-clojure">;; (look)
+{:success true,
+  :results
+  [{:type :PLAYER_LOOKED,
+    :message &quot;You looked around.&quot;,
+    :data
+    {:description &quot;A not-so bustling town square.&quot;,
+    :exits
+    {:bank &quot;A stained door marks the entrance to Greenstone bank.&quot;,
+      :docks &quot;The cobblestone street to the south leads to the docks.&quot;,
+      :graveyard &quot;People only usually go here once...&quot;},
+    :scene []}}],
+  :errors nil}</code></pre>
+    <hr>
+    <h2 id="moving">Moving</h2>
+    <pre><code class="language-clojure">;; (move :docks)
+{:success true,
+  :results
+  [{:type :PLAYER_MOVED,
+    :message &quot;You have moved location.&quot;,
+    :data
+    {:new-location
+    {:description &quot;A miserable, fetid excuse for a dock. There&#39;s some fishing spots and that&#39;s it.&quot;,
+      :exits
+      {:town-square &quot;The road north leads back to the town square.&quot;, :badman-pier &quot;A rickety pier of the docks.&quot;},
+      :scene
+      [{:id :resource4852835,
+        :type :resource,
+        :subtype :fishing-spot,
+        :name &quot;Beginner Fishing Spot&quot;,
+        :description &quot;DarkEval&#39;s oldest fishing spot. Perfect for beginners.&quot;,
+        :props {:required-fishing-level 1}}
+      {:id :resource6404969,
+        :type :resource,
+        :subtype :fishing-spot,
+        :name &quot;Flounder&#39;s folly&quot;,
+        :description &quot;Great for catching flounder and not much else.&quot;,
+        :props {:required-fishing-level 15}}
+      {:id :resource2134019,
+        :type :resource,
+        :subtype :cooking-spot,
+        :name &quot;A rusty furnace&quot;,
+        :description &quot;This thing has seen better days.&quot;,
+        :props {}}]}}}],
+  :errors nil}</code></pre>
+    <hr>
+    <h2 id="checking-inventory">Checking inventory</h2>
+    <pre><code class="language-clojure">;; (inventory)
+{:success true,
+  :results
+  [{:type :PLAYER_INVENTORY,
+    :message &quot;Your inventory, sir/madam.&quot;,
+    :data
+    [{:id :fishing6842542,
+      :type :fishing,
+      :subtype :rod,
+      :name &quot;&#39;Ol Reliable&quot;,
+      :description &quot;Don&#39;t think too hard about how many hands have touched this rod.&quot;,
+      :props {}}]}],
+  :errors nil}</code></pre>
+    <hr>
+    <h2 id="fishing">Fishing</h2>
+    <pre><code class="language-clojure">;; Use the fishing rod on the fishing spot:
+;; (use-item :fishing6842542 :resource4852835)
+{:success true,
+  :results
+  [{:type :FISH_CAUGHT,
+    :message &quot;You caught a raw fish.&quot;,
+    :data
+    {:id :raw-fish5853338,
+    :type :raw-fish,
+    :subtype :guppy,
+    :name &quot;Guppy&quot;,
+    :description &quot;A piddly little thing.&quot;,
+    :props {:required-cooking-level 1}}}
+  {:type :XP_GAINED, :message &quot;You have gained 4 xp in :fishing.&quot;, :data {:skill :fishing, :xp 4}}
+  {:type :ITEM_ADDED_INVENTORY,
+    :message &quot;Item has been added to your inventory.&quot;,
+    :data
+    {:id :raw-fish5853338,
+    :type :raw-fish,
+    :subtype :guppy,
+    :name &quot;Guppy&quot;,
+    :description &quot;A piddly little thing.&quot;,
+    :props {:required-cooking-level 1}}}],
+  :errors nil}</code></pre>
+    <hr>
+    <h2 id="cooking">Cooking</h2>
+    <pre><code class="language-clojure">;; Use the raw fish on the cooking spot:
+;; (use-item :raw-fish5853338 :resource2134019)
+{:success true,
+  :results
+  [{:type :FOOD_COOKED,
+    :message &quot;You have cooked your food.&quot;,
+    :data
+    {:id :food3053528,
+    :type :food,
+    :subtype :guppy,
+    :name &quot;Cooked guppy&quot;,
+    :description &quot;It looks very unappetising.&quot;,
+    :props {:heals 3}}}
+  {:type :XP_GAINED, :message &quot;You have gained 4 xp in :cooking.&quot;, :data {:skill :cooking, :xp 4}}
+  {:type :ITEM_ADDED_INVENTORY,
+    :message &quot;Item has been added to your inventory.&quot;,
+    :data
+    {:id :food3053528,
+    :type :food,
+    :subtype :guppy,
+    :name &quot;Cooked guppy&quot;,
+    :description &quot;It looks very unappetising.&quot;,
+    :props {:heals 3}}}],
+  :errors nil}</code></pre>
+    <hr>
+    <h2 id="eating">Eating</h2>
+    <pre><code class="language-clojure">;; Eat the cooked fish:
+;; (use-item :food3053528)
+{:success true, 
+:results 
+  [{:type :FOOD_ATE, 
+    :message &quot;You ate some food.&quot;, 
+    :data {:healed 0}}], :errors nil}</code></pre>
+    <h2 id="dropping-items">Dropping Items</h2>
+    <pre><code class="language-clojure">;; Drop the fishing rod.
+;; (drop-item :fishing6842542)
+{:success true,
+  :results
+  [{:type :ITEM_DROPPED,
+    :message &quot;Item has been dropped to the ground.&quot;,
+    :data
+    {:id :fishing6842542,
+    :type :fishing,
+    :subtype :rod,
+    :name &quot;&#39;Ol Reliable&quot;,
+    :description &quot;Don&#39;t think too hard about how many hands have touched this rod.&quot;,
+    :props {}}}],
+  :errors nil}</code></pre>
+    <hr>
+    <h2 id="combat">Combat</h2>
+    <pre><code class="language-clojure">; (move :town-square)
+; (move :graveyard)
+; (look)
+{:success true,
+  :results
+  [{:type :PLAYER_LOOKED,
+    :message &quot;You looked around.&quot;,
+    :data
+    {:description &quot;A spooky graveyard.&quot;,
+    :exits {:town-square &quot;The road west leads to the town square.&quot;},
+    :scene
+    [{:type :npc,
+      :subtype :skeleton,
+      :name &quot;Big Bones the Skeleton&quot;,
+      :description &quot;Well isn&#39;t that something.&quot;,
+      :props
+      {:stats {:hp 10, :hp-value 10, :dexterity 1, :strength 1, :grit 1},
+        :attack-bonus {:dexterity 0, :strength 0},
+        :grit-bonus {:dexterity 0, :strength 0}},
+      :id :npc14509}]}}],
+  :errors nil}
+
+;; (attack :npc14509)
+{:success true,
+  :results
+  [{:type :PLAYER_HIT_NPC, 
+    :message &quot;You hit an NPC.&quot;, 
+    :data {:damage 1, :npc &quot;Big Bones the Skeleton&quot;}}
+  {:type :XP_GAINED, 
+    :message &quot;You have gained 1 xp in :dexterity.&quot;, 
+    :data {:skill :dexterity, :xp 1}}
+  {:type :PLAYER_KILLED_NPC, 
+    :message &quot;You killed the NPC.&quot;, 
+    :data &quot;Big Bones the Skeleton&quot;}
+  {:type :ITEM_DROPPED,
+    :message &quot;Item has been dropped to the ground.&quot;,
+    :data
+    {:type :armour,
+    :subtype :old-shield,
+    :name &quot;Old Shield&quot;,
+    :description &quot;It&#39;s seen better days...&quot;,
+    :props
+    {:attack-bonus 
+      {:dexterity 0, :strength 0}, 
+      :grit-bonus {:dexterity 13}, 
+      :min-grit-level 1, :slot :off-hand},
+    :id :armour9752024}}],
+  :errors nil}</code></pre>
+    <hr>
+    <h2 id="equipping-items">Equipping items</h2>
+    <pre><code class="language-clojure">;; (pickup :armour9752024)
+{:success true,
+  :results [{:type :ITEM_ADDED_INVENTORY, 
+            :message &quot;Item has been added to your inventory.&quot;, 
+            :data &quot;Old Shield&quot;}],
+  :errors nil}
+
+;; (use-item :armour9752024)
+{:success true,
+  :results
+  [{:type :GEAR_EQUIPPED,
+    :message &quot;You have equipped gear.&quot;,
+    :data
+    {:type :armour,
+      :subtype :old-shield,
+      :name &quot;Old Shield&quot;,
+      :description &quot;It&#39;s seen better days...&quot;,
+      :props
+      {:attack-bonus
+      {:dexterity 0, :strength 0},
+      :grit-bonus {:dexterity 13},
+      :min-grit-level 1, :slot :off-hand},
+      :id :armour9752024}}],
+  :errors nil}</code></pre>
+    <hr>
+    <h2 id="scripting">Scripting</h2>
+    <p>We can use the API to script our interactions with the world.</p>
+    <p>For instance, here&#39;s a script that fishes an entire inventory of fish and cooks them all.</p>
+    <pre><code class="language-clojure">(defn fish-cooker
+  &quot;Starting from town-square, fish and cook an entire inventory of fish.&quot;
+  []
+  (move :docks)
+  (let [rod-id (-&gt;&gt; (inventory) :results first :data first :id)
+        fishing-spot-id (-&gt;&gt; (look) :results first :data :scene first :id)
+        furnace-id (-&gt;&gt; (look) :results first :data :scene last :id)
+        max-inventory-size 28
+        inventory-spaces (- max-inventory-size (count (inventory)))]
+    (dotimes [_ inventory-spaces]
+      (use-item rod-id fishing-spot-id))
+    (let [inventory (-&gt;&gt; (inventory) :results first :data)
+          raw-fish (filter #(= (:type %) :raw-fish) inventory)
+          raw-fish-ids (map :id raw-fish)]
+      (map (fn [fish-id] (use-item fish-id furnace-id)) raw-fish-ids))))</code></pre>
+    <hr>
+    <h2 id="conclusion">Conclusion</h2>
+    <p>If you&#39;ve any thoughts/suggestions/questions, please feel free to contact me at either:</p>
+    <ul>
+    <li>churchofturing (at) gmail.com</li>
+    <li>Discord: church.of.turing</li>
+    </ul>
+    
+    <script src="highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+  </div>
+</body>
+
+</html>
