@@ -24,7 +24,10 @@
     <h1 id="darkeval">DarkEval</h1>
     <p>Over the last week or so I&#39;ve been building a little text adventure with a twist. It&#39;s like a traditional text adventure RPG, except 
     all interactions with the world are carried out through a Clojure REPL. In a sense it&#39;s a hybrid between a text advenure, idle game and programming game. At the moment I&#39;ve implemented fishing, cooking and combat.</p>
-    <p>Because everything is Clojure, the game encourages you to script however you want.</p>
+    <p>Because everything is Clojure, the game encourages you to script however you want.
+      On startup the game creates an nREPL server that the player can connect to using their editor of choice. The 
+      typical gameplay loop is evaluating expressions such as those listed below - and using them as primitives to create larger world interactions.
+    </p>
     <p>Here&#39;s a quick look at the API so far.</p>
     <h2 id="inspecting-yourself">Inspecting yourself.</h2>
     <pre><code class="language-clojure">;; (check-yoself)
