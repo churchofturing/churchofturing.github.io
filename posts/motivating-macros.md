@@ -80,49 +80,147 @@ There'll be quite a lot of code snippets ahead. For clarity, I will be including
 
 This means I evaluated `(+ 2 3)` and the result was `5`. 
 
-# Beginnings
+# Introduction to Clojure
 
 Everything in Clojure is an expression. An expression can either evaluate to itself, or something else. 
 
-Here are some expressions that evaluate to themselves. Don't take my word for it, try them out.
+## Expressions that evaluate to themselves
+
+Try evaluating everything in this section.
+
+### Numbers
 
 ```clojure
-; This is a comment, and it's ignored entirely.
-
-; Long (https://clojure.org/reference/data_structures#_longs)
 42
 => 42
 
-; String 
-"hello, world!"
-=> "hello, world!"
+1.61803
+=> 1.61803
 
-; Ratio
-1/3
-=> 1/3
-
-; Double
-3.14
-=> 3.14
-
-; Keyword
-:green
-=> :green
-
-; nil, nada, zilch.
-nil
-=> nil
-
-; Boolean
-false 
-=> false
-
-; Character
-\a
-=> \a
+1/4
+=> 1/4
 ```
 
-Can you find any other examples?
+### Strings
+
+```clojure
+"To be, or not to be, that is the question."
+=> "To be, or not to be, that is the question."
+
+"This
+ spans
+ multiple
+ lines!"
+=> "This\n spans\n multiple\n lines!"
+```
+
+### Keywords
+
+Keywords are typically used either as keys in a map or as enums.
+
+```clojure
+:bird-is-the-word
+=> :bird-is-the-word
+
+:1337
+=> :1337
+
+:success
+=> :success
+```
+
+### Booleans
+
+```clojure
+true
+=> true
+
+false
+=> false
+```
+
+### Lists
+
+In Clojure, a list is an ordered collection of elements, written inside parentheses. Lists are linked lists, which means they are efficient for adding andremoving elements at the front but slower for random access.
+
+
+```clojure
+'(1 2 3 4 5)
+=> (1 2 3 4 5)
+
+; They don't have to hold the same type.
+'(false :1337 1/4 "U wot m8?")
+=> (false :1337 1/4 "U wot m8?")
+
+; This is another way to construct a list.
+(list 5 4 3 2 1)
+=> (5 4 3 2 1)
+```
+
+### Vectors
+
+Vectors are ordered collections, like lists, except they have better performance characteristics for random access. They are closest to arrays in other programming languages. 
+
+```clojure
+[0 1 1 2 3 5 8]
+=> [0 1 1 2 3 5 8]
+
+(vector 0 1 1 2 3 5 8)
+=> [0 1 1 2 3 5 8]
+```
+
+
+### Maps
+
+Maps associate keys to values. If you're familiar with JavaScript, they're quite similar to objects. In other languages they may be called something else, such as hash maps or dictionaries. For now we'll just look at how to create maps, later on we'll look at how to manipulate and modify them. 
+
+```clojure
+{:name "Roland Deschain" :age 40}
+=> {:name "Roland Deschain" :age 40}
+
+; They can be nested too.
+{:roland   {:name "Roland Deschain" :age 40}
+ :eddie    {:name "Eddie Dean" :age 23}
+ :susannah {:name "Susannah Dean" :age 26}
+ :jake     {:name "Jake Chambers" :age 11}}
+
+=> {:roland {:name "Roland Deschain", :age 40},
+    :eddie {:name "Eddie Dean", :age 23},
+    :susannah {:name "Susannah Dean", :age 26},
+    :jake {:name "Jake Chambers", :age 11}}
+
+; You can have vectors of maps.
+[{:name "Red" :hex "#FF0000"}
+ {:name "Green" :hex "#00FF00"}
+ {:name "Blue" :hex "#0000FF"}
+ {:name "Yellow" :hex "#FFFF00"}
+ {:name "Black" :hex "#000000"}
+ {:name "White" :hex "#FFFFFF"}]
+=> [{:name "Red" :hex "#FF0000"}
+    {:name "Green" :hex "#00FF00"}
+    {:name "Blue" :hex "#0000FF"}
+    {:name "Yellow" :hex "#FFFF00"}
+    {:name "Black" :hex "#000000"}
+    {:name "White" :hex "#FFFFFF"}]
+```
+
+### Sets
+
+Sets are **unique** collections. That means they can't have multiple of the same element.
+
+```clojure
+#{"Scooby-Doo"
+  "Shaggy Rogers"
+  "Fred Jones"
+  "Daphne Blake"
+  "Velma Dinkley"}
+=> #{"Velma Dinkley" "Daphne Blake" "Shaggy Rogers" "Scooby-Doo" "Fred Jones"}
+
+#{:there :is :one :duplicate :keyword :duplicate}
+; Syntax error reading source at (REPL:54:41).
+; Duplicate key: :duplicate
+```
+## Expressions that evaluate to something else
 
 Now that we've seen expressions that evaluate to themselves, what about expressions that evaluate to something else?
 
@@ -177,33 +275,31 @@ If you're particularly astute, you might notice that this allows you to treat th
 => (+ 1 2 3 4 5)
 ```
 
-If we can treat the first expression as data instead of a function invocation, that means we can do whatever we want with it. Tuck this in the back of your mind for now.
-
-
-# Fun with functions
-
-Lets play about with some expressions. This is crucial to building an intuition around how things work. Experimentation is encouraged.
-
---- 
-Some functions, such as `*`, can take many arguments.
-```clojure
-(* 2 2)
-=> 4
-
-(* 1 2 3 4 5 6 7 8 9 10)
-=> 3628800
-```
-
---- 
-Some functions don't actually return anything, they just perform side-effects. Below prints "Greetings!" to the console and returns nil.
-
-```clojure
-(println "Greetings!")
-; Greetings!
-=> nil
-```
+If we can treat the first expression as data instead of a function invocation, that means we can manipulate it like any other data structure. Tuck this in the back of your mind for now.
 
 ---
+
+### Math
+
+How do we do math in Clojure? It turns out very easily.
+
+```clojure
+; Note: a lot of the math functions can take any number of arguments.
+(+ 1 2 3 4 5)
+=> 15
+
+(- 1000 50)
+=> 950
+
+(* 435 23345)
+=> 10155075
+
+(/ 100 2)
+=> 50
+```
+
+The first symbols in the list are just functions. In a lot of other languages these math operations are implemented as special operators and have a specific order of precedence. In Clojure they're just functions like (almost) everything else, and the order they're evaluated is entirely unambiguous.
+
 Expressions can be nested as well.
 ```clojure
 (+ (* 2 5) (- 20 10))
@@ -216,7 +312,30 @@ Expressions can be nested as well.
 ; => 20
 ```
 
----
+You can find more Clojure math functions [here](https://clojuredocs.org/clojure.math). They're really just wrapper calls to java.lang.Math.
+
+```clojure
+(Math/abs -1)
+=> 1
+
+(Math/pow 2 8)
+=> 256.0
+
+(Math/sqrt 998001)
+=> 999.0
+
+(Math/round 5.7)
+=> 6
+
+(Math/floor 5.7)
+=> 5.0
+
+(Math/ceil 5.1)
+=> 6.0
+```
+
+### Do
+
 This next bit is a little more subtle. If you come from a more traditional imperative-style language, you'll be used to having statements execute sequentially.
 
 Take the JavaScript below.
@@ -266,46 +385,100 @@ So how actually do we translate the above JavaScript into the Clojure equivalet?
 ; Blast off!
 => "success"
 ```
+
+### Variables
 ---
 
+Variables are defined using `def`. `def` creates a symbol, and binds the value to that symbol. Lets see some examples.
+
 ```clojure
-; We can define variables using "def".
 (def meaning-of-life 42)
 => #'example.core/meaning-of-life
 
-; We can access the value of the variable by evaluating the symbol directly.
 meaning-of-life
 => 42
 
-; We can create anonymous functions using `fn` (often called a lambda).
-; Below defines a function that squares its input.
+(def simpsons-characters
+  [{:name "Homer Simpson" :role "Father"}
+   {:name "Marge Simpson" :role "Mother"}
+   {:name "Bart Simpson" :role "Son"}
+   {:name "Lisa Simpson" :role "Daughter"}
+   {:name "Maggie Simpson" :role "Baby"}])
+=> #'example.core/simpsons-characters
+
+simpsons-characters
+=> [{:name "Homer Simpson", :role "Father"}
+    {:name "Marge Simpson", :role "Mother"}
+    {:name "Bart Simpson", :role "Son"}
+    {:name "Lisa Simpson", :role "Daughter"}
+    {:name "Maggie Simpson", :role "Baby"}]
+```
+
+### Functions
+
+Functions can be created a few different ways. Lets start with `fn`. `fn` creates an anonymous function (often called a lambda). All this means is it's a function with no name.
+
+```clojure
 (fn [x] (* x x))
 => #function[example.core/eval10280/fn--10281]
+```
+We can use this lambda in two ways: either directly, or by assigning it to a variable.
 
-; We can use this lambda in two ways.
-; Either directly, or by assigning it to a variable.
+```clojure
 ; Directly (passes 10 as an argument to the leftmost function).
 ((fn [x] (* x x))
   10)
 => 100
 
+; Assigning an anonymous function to a variable.
 (def our-square (fn [x] (* x x)))
 => #'example.core/our-square
 
 (our-square 10)
 => 100
 
-; We can check that these are equivalent.
+; We can now check that these are equivalent.
 (=
  (our-square 10)
  ((fn [x] (* x x))
   10))
 => true
+```
 
-; Creating a lambda just to assign it to a variable can be tedious.
-; This is why Clojure gives us `defn` (define function).
-; This creates the lambda and assigns it to a symbol in one motion.
+Creating a lambda just to assign it to a variable can be tedious. This is why Clojure gives us `defn` (define function). `defn` creates a function and assigns it to a variable in one motion.
+
+```clojure
 (defn our-better-square
   [x]
   (* x x))
+
+(=
+  (our-square 23234)
+  (our-better-square 23234))
+=> true
 ```
+
+Using just what we've learned so far, we can start to write interesting functions. Lets implement the [Euclidian distance](https://en.wikipedia.org/wiki/Euclidean_distance) function for 2D space.
+
+The Euclidian distance function for 2D space is defined as:
+
+```
+distance = sqrt((p.x - q.x)^2 + (p.y - q.y)^2)
+```
+
+Here's how we would translate that into Clojure.
+
+```clojure
+(defn euclidian-distance
+  [px py qx qy]
+  (Math/sqrt
+   (+
+    (Math/pow (- px qx) 2)
+    (Math/pow (- py qy) 2))))
+=> #'example.core/euclidian-distance
+
+(euclidian-distance 23 2 5 23)
+=> 27.65863337187866
+```
+
+This part can be tricky for beginners, so be patient. Clojure is very explicit with the order the operations happen, so it forces you to think carefully how to translate it from normal mathematical syntax. 
