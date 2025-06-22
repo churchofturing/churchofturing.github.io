@@ -521,6 +521,25 @@ I mentioned earlier that in Clojure expressions get evaluated left-to-right. Fol
 
 It's because the if-expression *never evalutes the second expression*. This goes against the standard evaluation rules of Clojure, and because of this `if` is called a [special form.](https://clojure.org/reference/special_forms) Later on we will see how we can write our own macros that changes the evaluation rules of Clojure. 
 
+One last thing on `if`. You might wonder something like "Given `if` only takes two expressions, how do we perform multiple actions in a branch?". This is where `do` comes in handy.
+
+```clojure
+(if (> 10 5)
+  (do
+    (println "10 is larger than 5.")
+    (println "...to the surprise of nobody.")
+    :greater)
+  (do
+    (println "10 is less than or equal to 5.")
+    (println "...to the surprise of everybody.")
+    :less-than-or-equal))
+; 10 is larger than 5.
+; ...to the surprise of nobody.
+=> :greater
+```
+
+
+
 Moving on, `when` is just like `if` except with one branch. 
 
 ```clojure
@@ -554,6 +573,52 @@ Moving on, `when` is just like `if` except with one branch.
 => :zero
 ```
 
+#### Iteration
+
+Clojure has a few different ways of doing iteration.
+
+`dotimes` is quite similar to for-loops in other languages.
+
+```clojure
+(dotimes [i 10]
+  (if (even? i)
+    (println (str i " is even"))
+    (println (str i " is odd"))))
+; 0 is even
+; 1 is odd
+; 2 is even
+; 3 is odd
+; 4 is even
+; 5 is odd
+; 6 is even
+; 7 is odd
+; 8 is even
+; 9 is odd
+=> nil
+```
+
+`doseq` iterates over a sequence, and binds each individual element to a variable.
+
+```clojure
+(def simpsons-characters
+  [{:name "Homer Simpson" :role "Father"}
+   {:name "Marge Simpson" :role "Mother"}
+   {:name "Bart Simpson" :role "Son"}
+   {:name "Lisa Simpson" :role "Daughter"}
+   {:name "Maggie Simpson" :role "Baby"}])
+=> #'example.core/simpsons-characters
+
+(doseq [character simpsons-characters]
+  (println (get-in character [:role])))
+; Father
+; Mother
+; Son
+; Daughter
+; Baby
+=> nil
+```
+
+If you were to translate the above into English it would be something like: *for every character in the array of Simpsons characters, print their role in the family.*
 
 ### Let Bindings
 
