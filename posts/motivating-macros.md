@@ -482,3 +482,82 @@ Here's how we would translate that into Clojure.
 ```
 
 This part can be tricky for beginners, so be patient. Clojure is very explicit with the order the operations happen, so it forces you to think carefully how to translate it from normal mathematical syntax. 
+
+### Control Flow
+
+An important aspect of programming we've not yet touched on is control flow. Control flow can be broadly classified in two ways:
+
+- Conditionals
+- Iteration
+
+Conditionals let your program make choices, and iteration allows your program to repeat actions without duplicating code. 
+
+#### Conditionals
+
+```clojure
+(def player-age 19)
+(if (> player-age 18)
+  "Go on in!"
+  "Come back in a while.")
+=> "Go on in!"
+```
+
+Take a second and try to really understand what's happening here. The `if` takes a value, and if it's true returns the first expression or if it's false returns the second. This might prompt the question: "In Clojure, what is true?". This is quite easy to remember - it's everything that's not `nil` or `false`.
+
+Lets look at another example of `if`. 
+
+```clojure
+(/ 5 0)
+; Execution error (ArithmeticException) at example.core/eval9496 (REPL:15).
+; Divide by zero
+
+(if true
+  (+ 10 10)
+  (/ 5 0))
+=> 20
+```
+
+I mentioned earlier that in Clojure expressions get evaluated left-to-right. Following this evlauation scheme, we might have expected the sub-expression `(+ 10 10)` to be evaluated to `20`, and then `(/ 5 0)` to be evaluated to an error. Why then didn't we get a divide by zero error? 
+
+It's because the if-expression *never evalutes the second expression*. This goes against the standard evaluation rules of Clojure, and because of this `if` is called a [special form.](https://clojure.org/reference/special_forms) Later on we will see how we can write our own macros that changes the evaluation rules of Clojure. 
+
+Moving on, `when` is just like `if` except with one branch. 
+
+```clojure
+(when (> 20 30)
+  "I'll never be returned.")
+=> nil
+
+(when (> 20 10)
+  "But I will be.")
+=> "But I will be."
+```
+
+`cond` on the other hand allows multiple branches.
+
+```clojure
+(defn sign-checker
+  [number]
+  (cond
+    (< number 0) :negative
+    (> number 0) :positive
+    :else :zero))
+=> #'example.core/sign-checker
+
+(sign-checker 20)
+=> :positive
+
+(sign-checker -3)
+=> :negative
+
+(sign-checker 0)
+=> :zero
+```
+
+
+### Let Bindings
+
+### Manipulating Data
+
+### Map/Filter/Reduce
+
