@@ -6,6 +6,8 @@ Lisps are peculiar. I've come to realise that trying to explain the appeal of a 
 
 The common approach is to mention the uniform syntax, or the joys of interactive development with a REPL (Read Eval Print Loop), or the sophisticated macro systems, or if you're feeling like totally losing your audience throwing out "homoiconicity". This description, while true, ultimately falls flat; I believe it's because these are things best experienced rather than described.
 
+Lisp macros are useful in that they offer a level of abstraction that many programming languages can't even approximate. They can be used to write domain specific languages, eliminate boilerplate and even generate efficient code at compile-time. The issue is that learning a very different programming language is no easy task, and macros are quite an advanced feature. The reality is that many people get filtered before they're ever exposed to them.
+
 The point of this post is to touch on all of these topics from first principles using the Clojure programming language. Before we begin I also want to emphasise that this is a full-contact blog post and you wont get any benefit by just reading - you **have to** participate. Intuition is formed through experience.
 
 I also want to mention that there are very *many* books written on the topic at hand. It's a deep subject, and in the interest of keeping things digestable I will be moving fast and omitting a huge amount of detail. Hyperlinks are included for those who want to understand more.
@@ -1004,10 +1006,7 @@ You might start to toy about with the idea of writing a superset of JavaScript -
 
 ### Clojure Macros
 
-I can't believe I took this long to get to the point, but here we are. 
-
-Remember from earlier that lists have a double life in Clojure: to represent data and to invoke functions?
-This symmetry turns out to be very useful. 
+I can't believe I took this long to get to the point, but here we are. Remember how I mentioned earlier that lists have a double life in Clojure: to represent both data and function calls? This isn't just a design choice, and the symmetry turns out to be very useful. 
 
 ```clojure
 ; We can evaluate the addition of 5 numbers
@@ -1018,6 +1017,9 @@ This symmetry turns out to be very useful.
 '(+ 1 2 3 4 5)
 => (+ 1 2 3 4 5)
 
+Here's where it gets interesting. Since code is just data, we can manipulate it like any other data structure.
+
+```clojure
 ; Give us the first element in the list
 (first '(+ 1 2 3 4 5))
 => +
@@ -1035,9 +1037,11 @@ This symmetry turns out to be very useful.
 => 120
 ```
 
-Okay, admittedly this looks quite similar to what could be done with JavaScript. How can this be used to extend the language?
+Okay, admittedly this looks quite similar to what could be done with JavaScript. How is this different from string manipulation in JavaScript? The big difference is how seemlessly this integrates with the language.
 
-At compile time, Clojure text is read by the *Reader*. This just means it transforms your input text into Clojure data structures. Here are some examples:
+#### Compile-Time Code Generation
+
+Before Clojure evaluates your code, it goes through several phases. The **Reader** transforms your text into plain Clojure data structures.
 
 ```clojure
 (read-string "(+ 1 2)")
@@ -1050,10 +1054,38 @@ At compile time, Clojure text is read by the *Reader*. This just means it transf
 (print (eval (read)))
 ```
 
-Now that we know about the Reader, we can write our first macro. A macro is just a function that takes unevaluated code and returns new code that will replace the macro call before evaluation.
+Now comes the kicker. Macros are functions that run at compile time, taking unevaluated code as input and producing new code that replaces the macro call. Lets write our first one.
 
 ```clojure
-; Just a function that takes and produces Clojure
+; The "hello world" of macros has to be infix.
+; Lets write a function that takes a list, and returns another list with the first and second element swapped.
+; The [[x y z]] is destructuring - it says bind the first element of the list to `first`, second element to `second` etc.
+(defn infix [[first second third]]
+  (list second first third))
+
+(infix '(10 * 20))
+=> (* 10 20)
+
+; The above code is valid Clojure, but it didn't get executed. Lets write this as a macro instead.
+(defmacro infix [[first second third]]
+  (list second first third))
+
+(infix
+ (10 * 220))
+=> 2200
+
+
+; The same list is produced, but as a macro it gets expanded and fed into the evaluator.
+(macroexpand
+ '(infix
+   (10 * 220)))
+=> (* 10 220)
+```
+
+Lets revisit `unless` from earlier.
+
+```clojure
+; Don't worry about ` and ~ just now.
 (defmacro unless [pred a]
   `(if (not ~pred) ~a))
 => #'namespace.core/unless
@@ -1066,8 +1098,12 @@ Now that we know about the Reader, we can write our first macro. A macro is just
  (println "You can't play outside."))
 ; You can't play outside.
 => nil
+```
 
+Blink and you might miss it, but we were able to extend Clojure to support `unless` in two lines of code.
+We can even view the code that our macro generates using `macroexpand`. 
 
+```clojure
 ; We can expand the macro to see what it actually gets transformed to
 (macroexpand '(unless
                (= weather "sunny")
@@ -1075,13 +1111,72 @@ Now that we know about the Reader, we can write our first macro. A macro is just
 => (if (clojure.core/not (= weather "sunny")) (println "You can't play outside."))
 ```
 
-Using `defmacro` we were able to implement `unless` into Clojure using two lines of code. 
-This is because unlike JavaScript, Clojure exposes some very important steps before evaluation to the user. 
+Looking at the macro definition a little closer:
+
+```clojure
+(defmacro unless [pred a]
+  `(if (not ~pred) ~a))
+```
+
+You've probably noticed the ` and ~ symbols which haven't appeared before. The back-tick is usually called "Syntax quote", and is often used to create a code template. Here's an example:
+
+```clojure
+`(+ 1 (+ 1 2))
+=> (clojure.core/+ 1 (clojure.core/+ 1 2))
+```
+
+In constrast, the tilde (~) is called "unquote" and is often used to force an evaluation. 
+
+```clojure
+`(+ 1 (+ 1 2))
+=> (clojure.core/+ 1 (clojure.core/+ 1 2))
+
+`(+ 1 ~(+ 1 2))
+=> (clojure.core/+ 1 3)
+```
+We can see that before the inner `(+ 1 2)` expression wasn't evaluated, but now it is. Being able to control when something is or is not evaluated is incredibly powerful. 
+
+Knowing this, we can now understand what the macro is doing.
+
+```clojure
+(defmacro unless [pred a]
+  `(if (not ~pred) ~a))
+```
+
+The macro is a function that takes two expressions. A predicate, and a branch to be evaluated if the predicate is untrue.
+The macro transforms this into an if-statement, and it forces the evaluation of the predicate. If the predicate evaluates to not true, then it evaluates the branch. 
+
+```clojure
+(defmacro unless [pred a]
+  `(if (not ~pred) ~a))
+
+; Lets try removing the unquotes
+(defmacro unless [pred a]
+  `(if (not pred) a))
+
+(macroexpand '(unless
+               (= weather "sunny")
+               (println "You can't play outside.")))
+=> (if (clojure.core/not playground.core/pred) playground.core/a)
+
+; The above result makes no sense, pred and a are not expressions. 
+;; If the code tries to be executed it will throw an error.
+(unless
+ (= weather "sunny")
+ (println "You can't play outside."))
+; Syntax error compiling at (c:\...\core.clj:217:1).
+; No such var: playground.core/pred
+```
+
+
+#### The Compilation Pipeline
+
+Before we move on to some more sohpisticated examples, it's worth looking at where this all fits in to the compilation pipeline.
 
 ```
 ┌─────────────────┐                                              
-│                 │         (def weather "raining")                                     
 │                 │                                              
+│                 │         (def weather "raining")                                     
 │      Read       │         (unless                                      
 │                 │          (= weather "sunny")                                     
 │                 │          (println "You can't play outside."))                                     
@@ -1089,8 +1184,8 @@ This is because unlike JavaScript, Clojure exposes some very important steps bef
          │                                                       
          │                                                       
 ┌────────▼────────┐                                              
-│                 │         (def weather "raining")                                    
-│                 │                                              
+│                 │                                            
+│                 │         (def weather "raining")                                      
 │   Macroexpand   │         (if (clojure.core/not (= weather "sunny"))                                     
 │                 │           (println "You can't play outside."))                                    
 │                 │                                              
@@ -1106,4 +1201,6 @@ This is because unlike JavaScript, Clojure exposes some very important steps bef
 └─────────────────┘                                                                                                                            
 ```
 
-One thing that's important to remember is that macros are expanded at **compile time**. 
+Read transforms your textual code into Clojure data structures, macroexpand scans all of the expressions for macro calls and runs (expands) them, and the generated code gets evaluated at runtime. 
+
+The key takeaway here is that macros are functions that run at compile time, not run time (as other functions do). There's no performance overhead of using macros, your custom syntax gets transformed into regular Clojure before your program ever runs. This is fundamentally different to JavaScript: we're not manipulating strings or excuting code transformation at runtime.
