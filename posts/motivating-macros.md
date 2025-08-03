@@ -526,18 +526,23 @@ Lets look at another example of `if`.
 
 I mentioned earlier that in Clojure expressions get evaluated left-to-right. Following this evlauation scheme, we might have expected the sub-expression `(+ 10 10)` to be evaluated to `20`, and then `(/ 5 0)` to be evaluated to an error. Then why didn't we get a divide by zero error? 
 
-It's because the if-expression *never evalutes the second expression*. This goes against the standard evaluation rules of Clojure, and because of this `if` is called a [special form.](https://clojure.org/reference/special_forms) Later on we will see how we can write our own macros that change the evaluation rules of Clojure. 
+It's because the if-expression *never evalutes the second expression*. This goes against the standard evaluation rules of Clojure, and because of this `if` is called a [special form.](https://clojure.org/reference/special_forms) Later on we will see how we can write our own macros that changes the evaluation rules of Clojure. 
 
-Moving on, `when` is just like `if` except with one branch. 
+One last thing on `if`. You might wonder something like "Given `if` only takes two expressions, how do we perform multiple actions in a branch?". This is where `do` comes in handy.
 
 ```clojure
-(when (> 20 30)
-  "I'll never be returned.")
-=> nil
-
-(when (> 20 10)
-  "But I will be.")
-=> "But I will be."
+(if (> 10 5)
+  (do
+    (println "10 is larger than 5.")
+    (println "...to the surprise of nobody.")
+    :greater)
+  (do
+    (println "10 is less than or equal to 5.")
+    (println "...to the surprise of everybody.")
+    :less-than-or-equal))
+; 10 is larger than 5.
+; ...to the surprise of nobody.
+=> :greater
 ```
 
 `cond` on the other hand allows multiple branches.
@@ -613,6 +618,55 @@ Lets translate the JavaScript function to Clojure using `let`.
 ```
 
 Hopefully you can infer from context what's happening here. 
+
+
+#### Iteration
+
+Clojure has a few different ways of doing iteration.
+
+`dotimes` is quite similar to for-loops in other languages.
+
+```clojure
+(dotimes [i 10]
+  (if (even? i)
+    (println (str i " is even"))
+    (println (str i " is odd"))))
+; 0 is even
+; 1 is odd
+; 2 is even
+; 3 is odd
+; 4 is even
+; 5 is odd
+; 6 is even
+; 7 is odd
+; 8 is even
+; 9 is odd
+=> nil
+```
+
+`doseq` iterates over a sequence, and binds each individual element to a variable.
+
+```clojure
+(def simpsons-characters
+  [{:name "Homer Simpson" :role "Father"}
+   {:name "Marge Simpson" :role "Mother"}
+   {:name "Bart Simpson" :role "Son"}
+   {:name "Lisa Simpson" :role "Daughter"}
+   {:name "Maggie Simpson" :role "Baby"}])
+=> #'example.core/simpsons-characters
+
+(doseq [character simpsons-characters]
+  (println (get-in character [:role])))
+; Father
+; Mother
+; Son
+; Daughter
+; Baby
+=> nil
+```
+
+If you were to translate the above into English it would be something like: *for every character in the array of Simpsons characters, print their role in the family.*
+
 
 ### Manipulating Data
 
@@ -852,11 +906,11 @@ I'm just going to quote Wikipedia for this one:
 
 In short it's a fancy way of saying "programs that write other programs". Macros are just pieces of Lisp that operate on other pieces of Lisp - thus facilitating metaprogramming. Before we get into Clojure macros I'm going to take a quick detour into metaprogramming with JavaScript.
 
-JavaScript has this neat function called [eval](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval). Eval takes a string representation of some JavaScript code and, as the name suggests, evaluates it. 
+### A JavaScript Detour
 
-You can do some pretty cool things with just eval. 
+JavaScript has this neat function called [eval](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval). Eval takes a string representation of some JavaScript code and, as the name suggests, evaluates it. It turns out you can do some pretty cool things with just eval. 
 
-Note: I'm using NodeJS - if you try to run these examples in your browser you may get security related errors as running eval on user input is incredibly unsecure. 
+Note: I'm using NodeJS - if you try to run these examples in your browser you may get security related errors as running eval on user input is a very bad idea. 
 
 ```js
 eval("1 + 1");
@@ -866,14 +920,95 @@ eval("console.log('printing from inside eval');");
 // printing from inside eval
 => undefined
 
-const program = "x => x ** 2";
+const program = "x => x * 2";
 
 eval(program);
 => [Function (anonymous)]
 
-const square = eval(program);
+const double = eval(program);
 
-square(10);
-=> 100
+double(10);
+=> 20
 ```
 
+Not only can we represent programs in using strings, we can also manipulate and modify them.
+
+```js
+const double = x => x * 2;
+
+double(5);
+=> 10
+
+console.log(double.toString());
+// x => x * 2
+=> undefined
+
+
+const tripleProgram = double.toString().replace("2", "3");
+console.log(tripleProgram);
+// x => x * 3
+=> undefined
+
+const triple = eval(tripleProgram);
+triple(5);
+=> 15
+```
+
+So in JavaScript we can represent programs as data, and change that data programmatically. There's two big issues with this though:
+
+- Manipulating structured data (code) as unstructured text is very awkward for anything more complex than find/replace.
+- There's no way to use this technique to extend JavaScript itself. 
+
+To highlight the second point, let me walk through a contrived scenario.
+
+Imagine you've been programming in Ruby a lot recently, and you've fallen deeply in love with its `unless` statement.
+
+```ruby
+weather = "rainy"
+puts "You can't play outside" unless weather == "sunny"
+# "You can't play outside"
+```
+
+Now you're programming mainly in JavaScript, but in the back of your head you really wish you had something similar. You begin to imagine a construct like:
+
+```js
+const weather = "rainy";
+unless (weather === "sunny" {
+  console.log("You can't play outside");
+}
+```
+
+You begin to imagine the process of this getting this added to JavaScript.
+
+- Well we would need a proposal explaining the syntax/semantics/motivation around the addition.
+- Then we would need to bring the proposal to the [TC39](https://tc39.es/) group and go through the 6 [proposal stages](https://tc39.es/process-document/).
+- If we managed to make it through this process then the real fun begins - figuring out how to get it implemented in the prominent JavaScript engines and how to update tooling to support it.
+- Maybe with a couple of miracles we would be able to use `unless` in 2-10 business years.
+
+If you're a reasonable person you'd probably start to realise how unfeasible this is, given the time and effort required for such a relatively small addition.
+
+What about writing it in JavaScript?
+
+```js
+const weather = "rainy";
+const unless = (condition, branch) => { if (!condition) branch(); };
+
+unless(weather === "sunny", () => console.log("You can't play outside"));
+// "You can't play outside
+=> undefined
+```
+
+Well, it *works*, but it doesn't really feel like a part of JavaScript. There's also the very small overhead of the extra function call. 
+
+You might start to toy about with the idea of writing a superset of JavaScript - a transpiler called UnlessScript with the one singular addition of analysing files for your `unless` construct and translating it to JavaScript's native `if` and `else`. You spend an afternoon trying to write a parser for JS and you rename your files to *.us, but it quickly becomes obvious how much of a headache this is too. Lets abandon this thought for now - nothing gained and nothing lost.
+
+### Clojure Macros
+
+I can't believe I took this long to get to the point, but here we are. 
+
+Remember from earlier that lists have a double life in Clojure: to represent data and to invoke functions?
+This symmetry turns out to be very useful. 
+
+```clojure
+
+```
