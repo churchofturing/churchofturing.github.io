@@ -1034,3 +1034,76 @@ This symmetry turns out to be very useful.
 (eval (conj (rest '(+ 1 2 3 4 5)) '*))
 => 120
 ```
+
+Okay, admittedly this looks quite similar to what could be done with JavaScript. How can this be used to extend the language?
+
+At compile time, Clojure text is read by the *Reader*. This just means it transforms your input text into Clojure data structures. Here are some examples:
+
+```clojure
+(read-string "(+ 1 2)")
+=> (+ 1 2)
+
+; This waits for user input and converts it to Clojure
+(read)
+
+; Look, we've invented the REPL
+(print (eval (read)))
+```
+
+Now that we know about the Reader, we can write our first macro. A macro is just a function that takes unevaluated code and returns new code that will replace the macro call before evaluation.
+
+```clojure
+; Just a function that takes and produces Clojure
+(defmacro unless [pred a]
+  `(if (not ~pred) ~a))
+=> #'namespace.core/unless
+
+(def weather "raining")
+=> #'namespace.core/weather
+
+(unless 
+ (= weather "sunny")
+ (println "You can't play outside."))
+; You can't play outside.
+=> nil
+
+
+; We can expand the macro to see what it actually gets transformed to
+(macroexpand '(unless
+               (= weather "sunny")
+               (println "You can't play outside.")))
+=> (if (clojure.core/not (= weather "sunny")) (println "You can't play outside."))
+```
+
+Using `defmacro` we were able to implement `unless` into Clojure using two lines of code. 
+This is because unlike JavaScript, Clojure exposes some very important steps before evaluation to the user. 
+
+```
+┌─────────────────┐                                              
+│                 │         (def weather "raining")                                     
+│                 │                                              
+│      Read       │         (unless                                      
+│                 │          (= weather "sunny")                                     
+│                 │          (println "You can't play outside."))                                     
+└────────┬────────┘                                              
+         │                                                       
+         │                                                       
+┌────────▼────────┐                                              
+│                 │         (def weather "raining")                                    
+│                 │                                              
+│   Macroexpand   │         (if (clojure.core/not (= weather "sunny"))                                     
+│                 │           (println "You can't play outside."))                                    
+│                 │                                              
+└────────┬────────┘                                              
+         │                                                       
+         │                                                       
+┌────────▼────────┐                                              
+│                 │                                              
+│                 │         #'namespace.core/weather                                   
+│     Evaluate    │                                              
+│                 │         ; You can't play outside.                                   
+│                 │         => nil                                   
+└─────────────────┘                                                                                                                            
+```
+
+One thing that's important to remember is that macros are expanded at **compile time**. 
