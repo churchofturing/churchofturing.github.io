@@ -1010,5 +1010,27 @@ Remember from earlier that lists have a double life in Clojure: to represent dat
 This symmetry turns out to be very useful. 
 
 ```clojure
+; We can evaluate the addition of 5 numbers
+(+ 1 2 3 4 5)
+=> 15
 
+; We can also delay the evaluation using quote
+'(+ 1 2 3 4 5)
+=> (+ 1 2 3 4 5)
+
+; Give us the first element in the list
+(first '(+ 1 2 3 4 5))
+=> +
+
+; Now give us the arguments
+(rest '(+ 1 2 3 4 5))
+=> (1 2 3 4 5)
+
+; Add the multiplication function to the start of the list of arguments
+(conj (rest '(+ 1 2 3 4 5)) '*)
+=> (* 1 2 3 4 5)
+
+; Clojure has eval too, except it doesn't take a string
+(eval (conj (rest '(+ 1 2 3 4 5)) '*))
+=> 120
 ```
