@@ -36,10 +36,9 @@ With small companies, the person (or people) responsible for hiring set the tone
 
 In $ENTERPRISE, nobody gets fired. Your only risk of job-loss is being "made redundant" as part of the ever changing company structure. The lack of performance related churn creates a self perpetuating competency problem; the inconsistency of new hires reflects the inconsistency of your coworkers. 
 
-This creates incredibly surreal situations like your head of [something technical] not knowing how to use a computer, or your analyst [of something important] not being able to speak English. You know the absurdity of the situation, they know the absurdity of the situation, but the show must go on until one of you gets made redundant. There's never an incentive to mention these elephants in the room.
+This creates incredibly surreal situations like the head of [something technical] not knowing how to use a computer, or an analyst [of something important] not being able to speak English. You know the absurdity of the situation, they know the absurdity of the situation, but the show must go on until one of you gets made redundant. There's never an incentive to mention these elephants in the room.
 
 What can you do about this? Not a whole lot. 
-
 
 > Someone had blundered.
 >
@@ -52,3 +51,5 @@ What can you do about this? Not a whole lot.
 > \- [Alfred, Lord Tennyson](https://www.poetryfoundation.org/poems/45319/the-charge-of-the-light-brigade)
 
 # Urgency is just a word
+
+# Theatre of Security
