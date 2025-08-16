@@ -74,6 +74,10 @@ pre {
 }
 
 
+.webring {
+  border-left: 3px solid rgb(0, 190, 238);
+}
+
 @media (max-width: 1000px) {
   .container {
     width: 100%;
@@ -103,5 +107,9 @@ pre {
 
   .pre {
     border-left: 3px solid rgb(255 0 155);
+  }
+
+  .webring {
+    border-left: 3px solid rgb(0, 190, 238);
   }
 }
