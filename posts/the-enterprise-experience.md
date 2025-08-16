@@ -52,4 +52,8 @@ What can you do about this? Not a whole lot.
 
 # Urgency is just a word
 
+# Titles mean very little
+
+I have met no less than 6 (six) people with the title "head of architecture". I still have very little idea what this job role implies.
+
 # Theatre of Security

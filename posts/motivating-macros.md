@@ -1006,7 +1006,7 @@ You might start to toy about with the idea of writing a superset of JavaScript -
 
 ### Clojure Macros
 
-I can't believe I took this long to get to the point, but here we are. Remember how I mentioned earlier that lists have a double life in Clojure: to represent both data and function calls? This isn't just a design choice, and the symmetry turns out to be very useful. 
+I can't believe I took this long to get to the point, but here we are. Remember how I mentioned earlier that lists have a double life in Clojure: to represent both data and function calls? This isn't just a design choice; the symmetry turns out to be very useful. 
 
 ```clojure
 ; We can evaluate the addition of 5 numbers
@@ -1016,8 +1016,9 @@ I can't believe I took this long to get to the point, but here we are. Remember 
 ; We can also delay the evaluation using quote
 '(+ 1 2 3 4 5)
 => (+ 1 2 3 4 5)
+```
 
-Here's where it gets interesting. Since code is just data, we can manipulate it like any other data structure.
+Here's where it gets interesting. Since expressions are just lists, we can manipulate them like regular lists too.
 
 ```clojure
 ; Give us the first element in the list
@@ -1041,7 +1042,7 @@ Okay, admittedly this looks quite similar to what could be done with JavaScript.
 
 #### Compile-Time Code Generation
 
-Before Clojure evaluates your code, it goes through several phases. The **Reader** transforms your text into plain Clojure data structures.
+Before Clojure evaluates your code, it goes through several phases. The first (that we're concerned with) is the **Reader** that transforms your text into plain Clojure data structures.
 
 ```clojure
 (read-string "(+ 1 2)")
@@ -1203,4 +1204,4 @@ Before we move on to some more sohpisticated examples, it's worth looking at whe
 
 Read transforms your textual code into Clojure data structures, macroexpand scans all of the expressions for macro calls and runs (expands) them, and the generated code gets evaluated at runtime. 
 
-The key takeaway here is that macros are functions that run at compile time, not run time (as other functions do). There's no performance overhead of using macros, your custom syntax gets transformed into regular Clojure before your program ever runs. This is fundamentally different to JavaScript: we're not manipulating strings or excuting code transformation at runtime.
+The key takeaway here is that macros are functions that run at compile time, not run time (as other functions do). There's no performance overhead of using macros, your custom syntax gets transformed into regular Clojure before your program ever runs. This is fundamentally different to our JavaScript metaprogramming in that we're not manipulating strings or excuting code transformation at runtime.
