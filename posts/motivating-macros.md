@@ -6,11 +6,11 @@ Lisps are peculiar. I've come to realise that trying to explain the appeal of a 
 
 The common approach is to mention the uniform syntax, or the joys of interactive development with a REPL (Read Eval Print Loop), or the sophisticated macro systems, or if you're feeling like totally losing your audience throwing out "homoiconicity". This description, while true, ultimately falls flat; I believe it's because these are things best experienced rather than described.
 
-Lisp macros are useful in that they offer a level of abstraction that many programming languages can't even approximate. They can be used to write domain specific languages, eliminate boilerplate and even generate efficient code at compile-time. The issue is that learning a very different programming language is no easy task, and macros are quite an advanced feature. The reality is that many people get filtered before they're ever exposed to them.
+Lisp macros are useful in that they offer a level of abstraction that many programming languages can't even approximate. They can be used to write domain specific languages, eliminate boilerplate and even generate efficient code at compile-time. The issue is that learning a very different programming language is no easy task, and macros are quite an advanced feature. It's an unsurprising shame that many people get filtered before they're ever exposed to them.
 
-The point of this post is to touch on all of these topics from first principles using the Clojure programming language. Before we begin I also want to emphasise that this is a full-contact blog post and you wont get any benefit by just reading - you **have to** participate. Intuition is formed through experience.
+The point of this post is to touch on all of these topics from first principles using the Clojure programming language. Before we begin I also want to emphasise that this is a full-contact blog post and you wont get any benefit by just reading - you **have to** participate. I'll also be assuming some familiarity with programming in general. Ten minutes spent experimenting with Clojure goes further than an hour reading about it.
 
-I also want to mention that there are very *many* books written on the topic at hand. It's a deep subject, and in the interest of keeping things digestable I will be moving fast and omitting a huge amount of detail. Hyperlinks are included for those who want to understand more.
+There are very *many* books written on the topic at hand. It's a deep subject, and in the interest of keeping things digestable I will be moving fast and omitting a huge amount of detail. Hyperlinks are included for those who want to understand more.
 
 # On REPLs
 
@@ -36,18 +36,18 @@ An simplified Python development loop is below:
 3. See output.
 4. Go to step 1.
 
-The REPL rarely makes an appearance beyond one-off experimentation. It's a place to try out a new library, play with a new idea or figure out how to call a function. 
+In mainstream languages, the REPL rarely makes an appearance beyond one-off experimentation. Generally it's a place to try out a new library, play with a new idea or figure out how to call a function. 
 
-Lisps (generally but not always) are different. Interactive REPL development is one of their strengths. A simplified development loop for Clojure is below.
+Lisps (sometimes but not always) are different. Interactive REPL development is one of their strengths. A simplified development loop for Clojure is below.
 
 1. Open your project in your editor of choice.
 2. Start a REPL session and connect your editor to it.
 3. Send expressions directly from your editor to the REPL to be evaluated.
 4. Go to step 3.
 
-The difference might not be immediately obvious, but it's very obvious in practice. The feedback loop from idea to result is drastically shortened. You can poke, prod and manipulate data in ways that would've been tedious otherwise. For long lived programs (such as GUIs or servers), you an change things as they're running and immediately see your changes reflected. It is something to be experienced.
+The difference might not be immediately obvious, but it's striking in practice. The feedback loop from idea to result is drastically shortened. You can poke, prod and manipulate data in ways that would've been tedious otherwise. For long lived programs (such as GUIs or servers), you an change things as they're running and immediately see your changes reflected. It is something to be experienced.
 
-If this has caught your interest and you want to learn more, I'd recommend watching the talk: ["Stop Writing Dead Programs" by Jack Rusher](https://www.youtube.com/watch?v=8Ab3ArE8W3s).
+If this has caught your interest and you want to learn more, I'd recommend watching the talk ["Stop Writing Dead Programs" by Jack Rusher](https://www.youtube.com/watch?v=8Ab3ArE8W3s).
 
 # Setup
 
@@ -67,7 +67,7 @@ Once you have Java and Clojure installed, you now need an [editor](https://cloju
 2. [IntelliJ and Cursive](https://cursive-ide.com/).
 3. [Emacs](https://www.gnu.org/software/emacs/) and [CIDER](https://github.com/clojure-emacs/cider).
 
-You'll notice these are all in the format of "[Editor] and [Plugin]". That's because to get the interactive REPL development mentioned earlier, there's a small bit of plumbing that needs to happen between your editor and Clojure. Trust me, it's worth it.
+You'll notice these are all in the format of "[Editor] and [Plugin]". That's because to get the interactive REPL experience mentioned earlier, there's a small bit of plumbing that needs to happen between your editor and Clojure. Trust me, it's worth it.
 
 The easiest set up for a beginner in my opinion is VSCode + Calva. [Daniel Amber](https://www.youtube.com/@onthecodeagain) has a wonderful video showing how to set VSCode and Calva in only a few minutes. You can find it here, and I highly recommend you follow it:
 
@@ -90,7 +90,7 @@ Everything in Clojure is an expression. An expression can either evaluate to its
 
 ## Expressions that evaluate to themselves
 
-Try evaluating everything in this section, even if it's not very exciting. 
+Try evaluating everything in this section, even though it's not very exciting. 
 
 ### Numbers
 
@@ -226,7 +226,7 @@ Sets are **unique** collections. That means they can't have multiple of the same
 ```
 ## Expressions that evaluate to something else
 
-Now that we've seen expressions that evaluate to themselves, what about expressions that evaluate to something else?
+Now that we've seen expressions that evaluate to themselves, what about expressions that evaluate to something else? This is where things start to get interesting.
 
 Broadly these come in two forms:
 
@@ -270,9 +270,9 @@ The next logical question is "okay, if Clojure tries to invoke the first element
 => (1 2 3 4 5)
 ```
 
-That little quote symbol tells Clojure to just return the unevaluated form without trying to invoke it as a function. The former is just a shorthand version of the latter.
+That little apostrophe tells Clojure to just return the unevaluated form without trying to invoke it as a function. The former is just a shorthand version of the latter.
 
-If you're particularly astute, you might notice that this allows you to treat things that would usually be invoked as static data. 
+If you're particularly astute, you might notice that this allows you to treat expressions that would normally be invoked as static data. 
 
 ```clojure
 (+ 1 2 3 4 5)
@@ -319,7 +319,7 @@ Expressions can be nested as well.
 ; => 20
 ```
 
-Side note: this structure where operators precede their operands is known as [Polish notation](https://en.wikipedia.org/wiki/Polish_notation). At first this can look incredibly unintuitive as most of us have spent our lives internalising how to read [infix](https://en.wikipedia.org/wiki/Infix_notation) expressions and the order in which to evaluate them. There is however an advantage to this uniform structure, even if it's not immediately obvious: it very much simplifies metaprogramming. Tuck that away for now, but it's something we're going to be leveraging later.
+Side note: this structure where operators precede their operands is known as [Polish notation](https://en.wikipedia.org/wiki/Polish_notation). At first this can look incredibly unintuitive as most of us have spent our lives internalising how to read [infix](https://en.wikipedia.org/wiki/Infix_notation) expressions and the order in which to evaluate them. There is however an advantage to this uniform structure, even if it's not immediately obvious: it's unambiguous, and creates [expressions](https://en.wikipedia.org/wiki/S-expression) that are easy to manipulate than their infix counterparts.
 
 You can find more Clojure math functions [here](https://clojuredocs.org/clojure.math). They're really just wrapper calls to java.lang.Math.
 
@@ -1038,11 +1038,11 @@ Here's where it gets interesting. Since expressions are just lists, we can manip
 => 120
 ```
 
-Okay, admittedly this looks quite similar to what could be done with JavaScript. How is this different from string manipulation in JavaScript? The big difference is how seemlessly this integrates with the language.
+Okay, admittedly this looks quite similar to what could be done with JavaScript. How is this different from string manipulation in JavaScript? The big difference is how seemlessly this integrates with the language, and the stage at which it happens.
 
 #### Compile-Time Code Generation
 
-Before Clojure evaluates your code, it goes through several phases. The first (that we're concerned with) is the **Reader** that transforms your text into plain Clojure data structures.
+Before Clojure evaluates your code, it goes through several phases. The first (that we're concerned with) is called the **Reader**, and it transforms your text into plain Clojure data structures.
 
 ```clojure
 (read-string "(+ 1 2)")
@@ -1051,7 +1051,7 @@ Before Clojure evaluates your code, it goes through several phases. The first (t
 ; This waits for user input and converts it to Clojure
 (read)
 
-; Look, we've invented the REPL
+; Look ma, we've invented the REPL
 (print (eval (read)))
 ```
 
@@ -1076,7 +1076,7 @@ Now comes the kicker. Macros are functions that run at compile time, taking unev
 => 2200
 
 
-; The same list is produced, but as a macro it gets expanded and fed into the evaluator.
+; The same list is produced, but as a macro it gets expanded at compile-time and fed into the evaluator.
 (macroexpand
  '(infix
    (10 * 220)))
@@ -1119,14 +1119,14 @@ Looking at the macro definition a little closer:
   `(if (not ~pred) ~a))
 ```
 
-You've probably noticed the ` and ~ symbols which haven't appeared before. The back-tick is usually called "Syntax quote", and is often used to create a code template. Here's an example:
+You've probably noticed the ` and ~ symbols which haven't appeared before. The back-tick is usually called "Syntax quote", and is often used to create a code template. Think of it like template literals in JavaScript. Here's an example:
 
 ```clojure
 `(+ 1 (+ 1 2))
 => (clojure.core/+ 1 (clojure.core/+ 1 2))
 ```
 
-In constrast, the tilde (~) is called "unquote" and is often used to force an evaluation. 
+In constrast, the tilde (~) is called "unquote" and is often used to force an evaluation from within the template. 
 
 ```clojure
 `(+ 1 (+ 1 2))
@@ -1146,6 +1146,8 @@ Knowing this, we can now understand what the macro is doing.
 
 The macro is a function that takes two expressions. A predicate, and a branch to be evaluated if the predicate is untrue.
 The macro transforms this into an if-statement, and it forces the evaluation of the predicate. If the predicate evaluates to not true, then it evaluates the branch. 
+
+To really get a feel for syntax quoting and unquoting, it's best to play around with it a bit. 
 
 ```clojure
 (defmacro unless [pred a]
@@ -1172,7 +1174,7 @@ The macro transforms this into an if-statement, and it forces the evaluation of 
 
 #### The Compilation Pipeline
 
-Before we move on to some more sohpisticated examples, it's worth looking at where this all fits in to the compilation pipeline.
+Before we move on to some more sohpisticated examples, it's worth looking at where this all fits in to the execution pipeline.
 
 ```
 ┌─────────────────┐                                              
@@ -1202,6 +1204,67 @@ Before we move on to some more sohpisticated examples, it's worth looking at whe
 └─────────────────┘                                                                                                                            
 ```
 
-Read transforms your textual code into Clojure data structures, macroexpand scans all of the expressions for macro calls and runs (expands) them, and the generated code gets evaluated at runtime. 
+The read step transforms your textual code into Clojure data structures, the macroexpand step scans all of the expressions for macro calls and runs (expands) them, and the generated code gets evaluated at runtime. 
 
-The key takeaway here is that macros are functions that run at compile time, not run time (as other functions do). There's no performance overhead of using macros, your custom syntax gets transformed into regular Clojure before your program ever runs. This is fundamentally different to our JavaScript metaprogramming in that we're not manipulating strings or excuting code transformation at runtime.
+The key takeaway here is that macros are functions that run at compile time, not runtime (as other functions do). There's no performance overhead of using macros, your custom syntax gets transformed into regular Clojure before your program ever runs. 
+
+Try and reflect on the differences between Clojure macros and metaprogramming via string manipulation/eval in JavaScript.
+
+#### More Macros
+
+Right about now you're probably thinking: *"Okay, after a very contrived example we've produced an `unless` macro. Big whoop."*
+
+To you, my sarcastic friend, I would say that we've just scratched the surface. Now we're going to breeze through progressively more advanced macros, culminating in a fully fledged domain specific language.
+
+##### When-let
+
+Are you tired of creating bindings and having to check whether they have a value before doing anything? Fret no more, as combining `when` with `let` using all you've learned so far is incredibly straightforward.
+
+```clojure
+;; TODO: Verify 
+(defmacro when-let [binding & body]
+  `(let [~(first binding) ~(second binding)]
+     (when ~(first binding)
+       ~@body)))
+
+;; Usage example
+(when-let [user (find-user-by-id 123)]
+  (println "Found user:" (:name user))
+  (update-last-login user))
+```
+
+##### Benchmark
+
+```clojure
+;; TODO: Verify
+(defmacro bench [expr]
+  `(let [start# (System/nanoTime)
+         result# ~expr
+         end# (System/nanoTime)]
+     (println "Execution time:" (/ (- end# start#) 1000000.0) "ms")
+     result#))
+
+;; Usage
+(bench (Thread/sleep 100))
+```
+
+##### Notebook
+
+```clojure
+(comment
+  (notebook "Learning Clojure"
+    (note "Day 1: Basic Syntax"
+      "Learned about lists, vectors, maps"
+      "Practiced with REPL"
+      :tags ["learning"])
+    
+    (note "Day 2: Functions"
+      "Explored function definition with defn"
+      "Learned about anonymous functions"
+      :tags ["learning" "functions"])
+    
+    (note "Day 3: Macros"
+      "Mind blown by metaprogramming capabilities"
+      "Created my first macro!"
+      :tags ["learning" "macros"])))
+```
