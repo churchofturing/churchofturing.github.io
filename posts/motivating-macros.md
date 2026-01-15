@@ -4,13 +4,13 @@
 
 Lisps are peculiar. I've come to realise that trying to explain the appeal of a Lisp to someone is an exercise in futility. Firstly because Lisps are strange and secondly because any explanation fails to capture the appeal in a way that's relatable to most programmers. 
 
-The common approach is to mention the uniform syntax, or the joys of interactive development with a REPL (Read Eval Print Loop), or the sophisticated macro systems, or if you're feeling like totally losing your audience throwing out "homoiconicity". This description, while true, ultimately falls flat; I believe it's because these are things best experienced rather than described.
+The common approach is to mention the uniform syntax, or the joys of interactive development with a REPL (Read Eval Print Loop), or the sophisticated macro systems, or if you're feeling like totally losing your audience throwing out "homoiconicity". This description, while roughly true, ultimately falls flat; I believe it's because these are things best experienced rather than described.
 
-Lisp macros are useful in that they offer a level of abstraction that many programming languages can't even approximate. They can be used to write domain specific languages, eliminate boilerplate and even generate efficient code at compile-time. The issue is that learning a very different programming language is no easy task, and macros are quite an advanced feature. It's an unsurprising shame that many people get filtered before they're ever exposed to them.
+Lisp macros are useful in that they offer a level of abstraction that many programming languages can't even approximate. Macros are a mechanism by which you can extend and shape the language itself. They can be used to write domain specific languages, eliminate boilerplate and even generate efficient code at compile-time. The issue is that learning a very different programming language is no easy task, and macros are quite an advanced feature. It's therefore not a surprise that many people get filtered before they're ever exposed to them.
 
 The point of this post is to touch on all of these topics from first principles using the Clojure programming language. Before we begin I also want to emphasise that this is a full-contact blog post and you wont get any benefit by just reading - you **have to** participate. I'll also be assuming some familiarity with programming in general. Ten minutes spent experimenting with Clojure goes further than an hour reading about it.
 
-There are very *many* books written on the topic at hand. It's a deep subject, and in the interest of keeping things digestable I will be moving fast and omitting a huge amount of detail. Hyperlinks are included for those who want to understand more.
+Lisp is a [family of languages](https://churchofturing.github.io/landscapeoflisp.html). Macro systems are not consistent throughout all Lisps, even though their aims are largely similar. Some macro systems are more powerful than others. Macrology is a deep subject, and in the interest of keeping things digestable I will be moving fast and omitting a huge amount of detail. Hyperlinks are included for those who want to understand more.
 
 # On REPLs
 
@@ -1040,7 +1040,47 @@ Here's where it gets interesting. Since expressions are just lists, we can manip
 
 Okay, admittedly this looks quite similar to what could be done with JavaScript. How is this different from string manipulation in JavaScript? The big difference is how seemlessly this integrates with the language, and the stage at which it happens.
 
-#### Compile-Time Code Generation
+#### The Compilation Pipeline
+
+Before we move on, it's worth looking at the few different (simplified) stages of the execution pipeline.
+
+```
+┌─────────────────┐
+│                 │
+│                 │
+│      Read       │
+│                 │
+│                 │
+└────────┬────────┘
+         │
+         │
+┌────────▼────────┐
+│                 │
+│                 │
+│   Macroexpand   │
+│                 │
+│                 │
+└────────┬────────┘
+         │
+         │
+┌────────▼────────┐
+│                 │
+│                 │
+│     Evaluate    │
+│                 │
+│                 │
+└─────────────────┘
+```
+
+The read step transforms your textual code into Clojure data structures, the macroexpand step scans all of the expressions for macro calls and runs (expands) them, and the generated code gets evaluated. 
+
+If you're using a REPL (which I've encouraged you to use), all of these steps happen pretty much the instant you "evaluate" some code. If you're compiling your project to distribute it, then `read` and `macroexpand` happen exclusively at compile-time. In this context `evaluate` also runs at compile-time for top level forms, but does not evaluate function bodies for instance. 
+
+The key takeaway here is that macroexpand always happens before evaluation, and using `defmacro` we're able to sneak in functions that produce Clojure code before the evaluation phase. 
+
+Try and reflect on the differences between Clojure macros and metaprogramming via string manipulation/eval in JavaScript.
+
+#### Code Generation
 
 Before Clojure evaluates your code, it goes through several phases. The first (that we're concerned with) is called the **Reader**, and it transforms your text into plain Clojure data structures.
 
@@ -1055,10 +1095,9 @@ Before Clojure evaluates your code, it goes through several phases. The first (t
 (print (eval (read)))
 ```
 
-Now comes the kicker. Macros are functions that run at compile time, taking unevaluated code as input and producing new code that replaces the macro call. Lets write our first one.
+Now comes the kicker. Macros are functions that run before evaluation, taking unevaluated code as input and producing new code that replaces the macro call. We're going to write a macro called `infix` that allows you to write a very naive infix expression like `(10 + 10)`. We'll try writing this using a normal function first, and contrast this with the macro equivalent.
 
 ```clojure
-; The "hello world" of macros has to be infix.
 ; Lets write a function that takes a list, and returns another list with the first and second element swapped.
 ; The [[x y z]] is destructuring - it says bind the first element of the list to `first`, second element to `second` etc.
 (defn infix [[first second third]]
@@ -1067,20 +1106,50 @@ Now comes the kicker. Macros are functions that run at compile time, taking unev
 (infix '(10 * 20))
 => (* 10 20)
 
-; The above code is valid Clojure, but it didn't get executed. Lets write this as a macro instead.
+; Clojure has an `eval` function that takes Clojure code and evaluates it.
+(defn infix [[first second third]]
+  (let [expression (list second first third)]
+    (eval expression)))
+
+; Notice we have to quote the expression so that it doesn't get evaluated.
+(infix '(10 * 20))
+=> 200
+
+; What happens if we remove the quote?
+; Remember, Clojure evaluates arguments to functions first. When it tries to evaluate
+; (10 * 20) it throws an error because 10 isn't a function.
+(infix (10 * 20))
+; Execution error (ClassCastException) at playground.core/eval9538 (REPL:265).
+; class java.lang.Long cannot be cast to class clojure.lang.IFn (java.lang.Long is in module java.base of loader 'bootstrap'; clojure.lang.IFn is in unnamed module of loader 'app')
+
+
+; Lets write the above as a macro instead.
 (defmacro infix [[first second third]]
   (list second first third))
 
+; You'll probably be wondering "How can we pass it the unquoted expression", and "why did it get executed even though
+; the macro only returns a list?". Great questions.
+; 
+; In Clojure, macros run before the evaluation stage and receive their arguments unevaluted (as normal data structures).
+; The output of a macro is Clojure code that gets evaluated after the macro has been expanded (executed).
 (infix
  (10 * 220))
 => 2200
 
 
-; The same list is produced, but as a macro it gets expanded at compile-time and fed into the evaluator.
+; There's a neat function called macroexpand that shows you what Clojure code a macro translates to.
+; This shows that our infix call gets translated to (* 10 220). 
 (macroexpand
  '(infix
    (10 * 220)))
 => (* 10 220)
+
+; The big difference between the `defn` infix above and the `defmacro` infix is that the defn version translates
+; the quoted list to a new structure entirely at evaluation. The `defmacro` version takes all of its arguments as
+; unevaluated datastructures and translates it to valid Clojure code before evaluation (in macroexpand). As the
+; arguments to a macro are unevaluated, we're capable of extending Clojure's evaluation rules however we want. 
+; This is what makes macros so powerful.
+
 ```
 
 Lets revisit `unless` from earlier.
@@ -1171,10 +1240,7 @@ To really get a feel for syntax quoting and unquoting, it's best to play around 
 ; No such var: playground.core/pred
 ```
 
-
-#### The Compilation Pipeline
-
-Before we move on to some more sohpisticated examples, it's worth looking at where this all fits in to the execution pipeline.
+If we translate our `unless` macro to the execution pipeline we mentioned above, it would look something like:
 
 ```
 ┌─────────────────┐                                              
@@ -1203,12 +1269,6 @@ Before we move on to some more sohpisticated examples, it's worth looking at whe
 │                 │         => nil                                   
 └─────────────────┘                                                                                                                            
 ```
-
-The read step transforms your textual code into Clojure data structures, the macroexpand step scans all of the expressions for macro calls and runs (expands) them, and the generated code gets evaluated at runtime. 
-
-The key takeaway here is that macros are functions that run at compile time, not runtime (as other functions do). There's no performance overhead of using macros, your custom syntax gets transformed into regular Clojure before your program ever runs. 
-
-Try and reflect on the differences between Clojure macros and metaprogramming via string manipulation/eval in JavaScript.
 
 #### More Macros
 
