@@ -98,15 +98,15 @@ pre {
   }
 
   .name {
-    text-decoration-color: rgb(255 0 155);
+    text-decoration-color: rgb(226, 56, 56);
   }
 
   .post {
-    border-left: 3px solid rgb(255 0 155);
+    border-left: 3px solid rgb(226, 56, 56);
   }
 
   .pre {
-    border-left: 3px solid rgb(255 0 155);
+    border-left: 3px solid rgb(226, 56, 56);
   }
 
   .webring {
