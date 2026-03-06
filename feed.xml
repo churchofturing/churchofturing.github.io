@@ -2,7 +2,7 @@
 <rss version="2.0">
   <channel>
     <title>Church Of Turing - CS Hangout</title>
-    <link>https://churchofturing.github.io/</link>
+  <link>https://churchoftur.ing/</link>
     <description>My infrequently updated thoughts.</description>
     <language>en-uk</language>
     <lastBuildDate>Fri, 07 Mar 2025 20:25:00 GMT</lastBuildDate>
@@ -10,42 +10,42 @@
 
     <item>
       <title>Closures: An Introduction </title>
-      <link>https://churchofturing.github.io/closures.html</link>
+  <link>https://churchoftur.ing/closures.html</link>
       <description>A short introduction to closures.</description>
       <pubDate>Mon, 12 Feb 2024 09:00:00 GMT</pubDate>
-      <guid>https://churchofturing.github.io/closures.html</guid>
+  <guid>https://churchoftur.ing/closures.html</guid>
     </item>
 
     <item>
       <title>The Landscape of Lisp</title>
-      <link>https://churchofturing.github.io/landscapeoflisp.html</link>
+  <link>https://churchoftur.ing/landscapeoflisp.html</link>
       <description>A brief introduction to the major Lisp dialects.</description>
       <pubDate>Tue, 04 Mar 2025 15:30:00 GMT</pubDate>
-      <guid>https://churchofturing.github.io/landscapeoflisp.html</guid>
+  <guid>https://churchoftur.ing/landscapeoflisp.html</guid>
     </item>
 
     <item>
       <title>The Problem Is...</title>
-      <link>https://churchofturing.github.io/theproblemis.html</link>
+  <link>https://churchoftur.ing/theproblemis.html</link>
       <description>What's the problem? I'm not quite sure.</description>
       <pubDate>Wed, 26 Mar 2025 21:00:00 GMT</pubDate>
-      <guid>https://churchofturing.github.io/theproblemis.html</guid>
+  <guid>https://churchoftur.ing/theproblemis.html</guid>
     </item>
 
     <item>
       <title>On Hammers and Nails</title>
-      <link>https://churchofturing.github.io/hammersandnails.html</link>
+  <link>https://churchoftur.ing/hammersandnails.html</link>
       <description>Reflecting on my own assumptions and the rabbitholes they can lead to.</description>
       <pubDate>Sun, 12 Apr 2025 19:00:00 GMT</pubDate>
-      <guid>https://churchofturing.github.io/hammersandnails.html</guid>
+  <guid>https://churchoftur.ing/hammersandnails.html</guid>
     </item>
 
     <item>
       <title>The Enterprise Experience</title>
-      <link>https://churchofturing.github.io/the-enterprise-experience.html</link>
+  <link>https://churchoftur.ing/the-enterprise-experience.html</link>
       <description>Reflections on a year at an enterprise organisation.</description>
       <pubDate>Mon, 18 Aug 2025 13:00:00 GMT</pubDate>
-      <guid>https://churchofturing.github.io/the-enterprise-experience.html</guid>
+  <guid>https://churchoftur.ing/the-enterprise-experience.html</guid>
     </item>
   </channel>
 </rss>
