@@ -78,6 +78,12 @@ pre {
   border-left: 3px solid rgb(0, 190, 238);
 }
 
+img {
+  max-width: 100%;
+  display: block;
+  margin: 0 auto;
+}
+
 @media (max-width: 1000px) {
   .container {
     width: 100%;
